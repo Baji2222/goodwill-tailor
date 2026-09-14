@@ -4686,20 +4686,22 @@ function attach() {
         }
 
         try {
-          const staff = (await get(KEY.staff)) || [];
+          const r = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: u, password: p })
+          });
 
-          const matched = staff.find(s => 
-            String(s.username || '') === u ||
-            String(s.phone || '') === u ||
-            String(s.id || '') === u
-          );
+          const j = await r.json().catch(() => ({}));
 
-          if (!matched || String(matched.password || '') !== String(p)) {
-            console.debug('Login failed', { tried: u, found: !!matched, user: matched ? matched.username || matched.id : null });
+          if (!r.ok || !j.ok) {
+            // keep existing error message
             state.error = 'Invalid username or password.';
             render();
             return;
           }
+
+          const matched = j.user || null;
 
           state.user = { id: matched.id, name: matched.name || matched.username || u, phone: matched.phone || null, isAdmin: Boolean(matched.isAdmin) };
           state.screen = matched.isAdmin ? 'admin' : 'staff';

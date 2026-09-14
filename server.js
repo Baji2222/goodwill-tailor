@@ -318,9 +318,67 @@ async function saveCustomersToSupabase(value) {
 }
 
 async function handleAuth(req, res, body) {
-  // Username/password auth is deprecated for this application.
-  // Authentication must be performed by phone OTP flows.
-  return sendJSON(res, 410, { ok: false, error: 'Deprecated: use phone OTP endpoints (/api/send-otp and /api/verify-otp).' });
+  try {
+    const payload = JSON.parse(body || '{}');
+    const username = String(payload.username || '').trim();
+    const password = String(payload.password || '');
+
+    if (!username || !password) {
+      return sendJSON(res, 400, { ok: false, error: 'Missing username or password' });
+    }
+
+    // If Supabase is configured, verify against Supabase staff table using password_hash
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('staff').select('*').eq('username', username).limit(1);
+        if (error || !data || !data.length) {
+          return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
+        }
+
+        const user = data[0];
+        if (user.password_hash !== hashPassword(password)) {
+          return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
+        }
+
+        return sendJSON(res, 200, {
+          ok: true,
+          user: {
+            id: user.id,
+            name: user.name,
+            username: user.username,
+            isAdmin: Boolean(user.is_admin)
+          }
+        });
+      } catch (e) {
+        return sendJSON(res, 500, { ok: false, error: 'Auth lookup failed' });
+      }
+    }
+
+    // Local development fallback: check data.json (legacy plaintext passwords)
+    const data = readData();
+    const staff = (data.gw_staff || []).find(s => String(s.username || '') === username || String(s.phone || '') === username || String(s.id || '') === username) || null;
+
+    if (!staff) {
+      return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
+    }
+
+    if (String(staff.password || '') !== String(password)) {
+      return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
+    }
+
+    return sendJSON(res, 200, {
+      ok: true,
+      user: {
+        id: staff.id,
+        name: staff.name || staff.username,
+        username: staff.username,
+        isAdmin: Boolean(staff.isAdmin)
+      }
+    });
+
+  } catch (e) {
+    return sendJSON(res, 400, { ok: false, error: 'Invalid auth payload' });
+  }
 }
 
 async function handleSendOtp(req, res, body) {
