@@ -1154,7 +1154,6 @@ function login() {
         </div>
 
         ${
-
           state.tab === 'staff'
 
             ? `
@@ -2073,20 +2072,10 @@ function staffModal() {
         <div class="field">
 
           <label>
-            Username
+            ${T.mobile}
           </label>
 
-          <input id="susername" placeholder="username (can be numeric)">
-
-        </div>
-
-        <div class="field">
-
-          <label>
-            Password
-          </label>
-
-          <input id="spassword" type="password" placeholder="password">
+          <input id="sphone" inputmode="numeric" maxlength="10" placeholder="${T.mobilePlaceholder}">
 
         </div>
 
@@ -4667,57 +4656,6 @@ function attach() {
     );
 
 
-  /* ---------- STAFF USERNAME/PASSWORD LOGIN ---------- */
-
-  document
-    .getElementById('login')
-    ?.addEventListener(
-      'submit',
-      async e => {
-        e.preventDefault();
-
-        const u = (document.getElementById('u') || {}).value.trim();
-        const p = (document.getElementById('p') || {}).value || '';
-
-        if (!u || !p) {
-          state.error = 'Enter username and password.';
-          render();
-          return;
-        }
-
-        try {
-          const staff = (await get(KEY.staff)) || [];
-
-          const matched = staff.find(s => 
-            String(s.username || '') === u ||
-            String(s.phone || '') === u ||
-            String(s.id || '') === u
-          );
-
-          if (!matched || String(matched.password || '') !== String(p)) {
-            state.error = 'Invalid username or password.';
-            render();
-            return;
-          }
-
-          state.user = { id: matched.id, name: matched.name || matched.username || u, phone: matched.phone || null, isAdmin: Boolean(matched.isAdmin) };
-          state.screen = matched.isAdmin ? 'admin' : 'staff';
-
-          try { state.staff = await get(KEY.staff) || state.staff; state.customers = await get(KEY.customers) || state.customers; } catch (e) {}
-
-          state.error = '';
-          render();
-
-        } catch (err) {
-          console.error('Login error', err);
-          state.error = 'Login failed.';
-          render();
-        }
-
-      }
-    );
-
-
   /* ==================================================
      FIXED STAFF / ADMIN LOGIN
 
@@ -5073,56 +5011,6 @@ function attach() {
 
       }
     );
-
-
-    /* ---------- CONFIRM ADD STAFF ---------- */
-
-    document
-      .getElementById('confirm')
-      ?.addEventListener(
-        'click',
-        async () => {
-          try {
-            const name = (document.getElementById('sn') || {}).value.trim();
-            const username = (document.getElementById('susername') || {}).value.trim();
-            const password = (document.getElementById('spassword') || {}).value || '';
-
-            if (!name || !username || !password) {
-              alert('Enter name, username and password.');
-              return;
-            }
-
-            const staff = (await get(KEY.staff)) || [];
-
-            // ensure unique username
-            if (staff.find(s => String(s.username || '') === username)) {
-              alert('Username already exists.');
-              return;
-            }
-
-            const newStaff = {
-              id: 'staff-' + Date.now().toString().slice(-6),
-              username: username,
-              password: String(password),
-              name: name,
-              isAdmin: false
-            };
-
-            staff.push(newStaff);
-
-            await set(KEY.staff, staff);
-
-            state.modal = false;
-            state.staff = staff;
-            state.error = '';
-            render();
-
-          } catch (err) {
-            console.error('Add staff error', err);
-            alert('Failed to add staff.');
-          }
-        }
-      );
 
 
   /* ---------- CANCEL CUSTOMER ---------- */

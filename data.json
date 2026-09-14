@@ -13,6 +13,13 @@
       "username": "master",
       "password": "master",
       "isAdmin": false
+    },
+    {
+      "id": "staff-059567",
+      "username": "9494259885",
+      "password": "9494259885",
+      "name": "baji",
+      "isAdmin": false
     }
   ],
   "gw_customers": [
