@@ -8,6 +8,18 @@ function hashPassword(pw) {
   return crypto.createHash('sha256').update(String(pw || '')).digest('hex');
 }
 
+// Keep the documented demo administrator available on first serverless use.
+// This is idempotent: it only creates the account when it does not exist.
+async function ensureDefaultAdmin(supabase) {
+  await supabase.from('staff').upsert({
+    id: 'admin1',
+    username: 'admin',
+    password_hash: hashPassword('goodwill123'),
+    name: 'Admin',
+    is_admin: true
+  }, { onConflict: 'username', ignoreDuplicates: true });
+}
+
 function sendJson(res, status, data) {
   res.statusCode = status;
   res.setHeader('Content-Type', 'application/json');
@@ -52,6 +64,7 @@ module.exports = async function handler(req, res) {
     }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SECRET_KEY);
+    await ensureDefaultAdmin(supabase);
 
     const { data: staffRows, error } = await supabase.from('staff').select('*').eq('username', username);
 
