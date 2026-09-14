@@ -9,15 +9,35 @@ function hashPassword(pw) {
 }
 
 // Keep the documented demo administrator available on first serverless use.
-// This is idempotent: it only creates the account when it does not exist.
+// A previous client could accidentally replace its hash with the empty-password
+// hash, so repair only that known bad state without overriding a custom password.
 async function ensureDefaultAdmin(supabase) {
-  await supabase.from('staff').upsert({
-    id: 'admin1',
-    username: 'admin',
-    password_hash: hashPassword('goodwill123'),
-    name: 'Admin',
-    is_admin: true
-  }, { onConflict: 'username', ignoreDuplicates: true });
+  const { data: rows, error } = await supabase
+    .from('staff')
+    .select('id, password_hash')
+    .eq('username', 'admin');
+
+  if (error) throw error;
+
+  if (!rows || !rows.length) {
+    const { error: insertError } = await supabase.from('staff').insert({
+      id: 'admin1',
+      username: 'admin',
+      password_hash: hashPassword('goodwill123'),
+      name: 'Admin',
+      is_admin: true
+    });
+    if (insertError) throw insertError;
+    return;
+  }
+
+  if (rows[0].password_hash === hashPassword('')) {
+    const { error: updateError } = await supabase
+      .from('staff')
+      .update({ password_hash: hashPassword('goodwill123') })
+      .eq('id', rows[0].id);
+    if (updateError) throw updateError;
+  }
 }
 
 function sendJson(res, status, data) {

@@ -231,10 +231,18 @@ async function readCustomersFromSupabase() {
 async function saveStaffToSupabase(value) {
   if (!supabase) return writeData({ gw_staff: value, gw_customers: readData().gw_customers || [] });
   for (const s of value) {
+    const id = s.id || 'staff-' + crypto.randomUUID();
+    const { data: existing, error: existingError } = await supabase
+      .from('staff')
+      .select('password_hash')
+      .or(`id.eq.${id},username.eq.${s.username}`)
+      .limit(1);
+    if (existingError) throw existingError;
+
     const row = {
-      id: s.id || 'staff-' + crypto.randomUUID(),
+      id,
       username: s.username,
-      password_hash: hashPassword(s.password || ''),
+      password_hash: s.password ? hashPassword(s.password) : (existing?.[0]?.password_hash || hashPassword('')),
       name: s.name || s.username,
       is_admin: Boolean(s.isAdmin)
     };

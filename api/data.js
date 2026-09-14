@@ -108,10 +108,21 @@ async function getCustomersRows(supabase) {
 async function saveStaffRows(supabase, value) {
   for (const row of Array.isArray(value) ? value : []) {
     const id = row.id || crypto.randomUUID();
+    const { data: existing, error: existingError } = await supabase
+      .from('staff')
+      .select('password_hash')
+      .or(`id.eq.${id},username.eq.${row.username}`)
+      .limit(1);
+    if (existingError) throw existingError;
+
+    const passwordHash = row.password
+      ? hashPassword(row.password)
+      : existing?.[0]?.password_hash || hashPassword('');
+
     await supabase.from('staff').upsert({
       id,
       username: row.username,
-      password_hash: hashPassword(row.password || ''),
+      password_hash: passwordHash,
       name: row.name || row.username,
       is_admin: Boolean(row.isAdmin)
     }, { onConflict: 'id' });
