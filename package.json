@@ -1,0 +1,17 @@
+{
+  "name": "goodwill-tailor",
+  "version": "1.0.0",
+  "description": "Goodwill Tailor static front-end with a Supabase-backed Node API server.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "latest",
+    "@vercel/node": "^13.0.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@vercel/build-utils": "^14.10.0"
+  }
+}

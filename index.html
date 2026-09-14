@@ -1,0 +1,6000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goodwill Tailor</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --navy: #1C2541;
+  --navy-light: #2E3A5C;
+  --brass: #B8935F;
+  --bg: #FAFAF7;
+  --surface: #FFF;
+  --border: #E5E1D8;
+  --text: #22252B;
+  --muted: #6B7280;
+  --pending: #C08A2E;
+  --progress: #3B6FA0;
+  --success: #3A7D5C;
+  --delivered: #6B6F76;
+  --danger: #B3462C;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.wordmark {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.center {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--navy);
+  display: grid;
+  place-items: center;
+  color: var(--brass);
+  font: 700 25px "Space Grotesk";
+}
+
+.brand {
+  font: 700 20px "Space Grotesk";
+  color: var(--navy);
+}
+
+.sub {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+
+.tabs {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  flex: 1;
+  border: 0;
+  background: #fff;
+  padding: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.tabs .active {
+  background: var(--navy);
+  color: #fff;
+}
+
+.field {
+  margin-bottom: 13px;
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.field input,
+.field select,
+.field textarea,
+.search {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.search:focus {
+  outline: 2px solid var(--brass);
+  border-color: var(--brass);
+}
+
+.voice-name-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.voice-name-wrap input {
+  flex: 1;
+}
+
+.voice-btn {
+  min-width: 110px;
+}
+
+.voice-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.voice-note.listening {
+  color: var(--success);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.primary {
+  background: var(--navy);
+  color: #fff;
+}
+
+.primary:hover {
+  background: var(--navy-light);
+}
+
+.outline {
+  background: #fff;
+  color: var(--navy);
+  border-color: var(--border);
+}
+
+.danger {
+  color: var(--danger);
+  background: #fff;
+  border-color: var(--border);
+}
+
+.full {
+  width: 100%;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 12px;
+  margin-top: 7px;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar .logo {
+  margin: 0;
+}
+
+.topbar .mark {
+  width: 34px;
+  height: 34px;
+  font-size: 18px;
+}
+
+.topbar .brand {
+  font-size: 15px;
+}
+
+.topbar .sub {
+  font-size: 9px;
+}
+
+.who {
+  font-size: 12px;
+  text-align: right;
+  color: var(--muted);
+}
+
+.role {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.logout {
+  border: 0;
+  background: none;
+  text-decoration: underline;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+main {
+  max-width: 760px;
+  width: 100%;
+  margin: auto;
+  padding: 20px;
+}
+
+.title {
+  font: 500 16px "Space Grotesk";
+  color: var(--navy);
+  margin: 22px 0 11px;
+}
+
+.title:first-child {
+  margin-top: 0;
+}
+
+.stats {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  flex: 1;
+  min-width: 100px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.num {
+  font: 700 22px "Space Grotesk";
+  color: var(--navy);
+}
+
+.lbl {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.item,
+.order {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.primary-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.secondary {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.toolbar .search {
+  flex: 1;
+}
+
+.toolbar .btn {
+  width: auto;
+}
+
+.order {
+  border-radius: 12px;
+}
+
+.orderhead {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.orderid {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.date {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.pill {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 4px 9px;
+  font-size: 11px;
+}
+
+.pending {
+  background: #F5E6CC;
+  color: var(--pending);
+}
+
+.in_progress {
+  background: #DCE7F2;
+  color: var(--progress);
+}
+
+.completed {
+  background: #DCEBE3;
+  color: var(--success);
+}
+
+.delivered {
+  background: #E7E7E9;
+  color: var(--delivered);
+}
+
+.steps {
+  display: flex;
+  align-items: center;
+  margin: 13px 0 4px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.dot.done {
+  background: var(--success);
+}
+
+.line {
+  height: 2px;
+  background: var(--border);
+  flex: 1;
+}
+
+.line.done {
+  background: var(--success);
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: var(--muted);
+}
+
+.payment,
+.notes {
+  background: #F7F5F0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  font-size: 12.5px;
+}
+
+.payrow {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+}
+
+.remaining {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.photos {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.photo {
+  width: 90px;
+  height: 90px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #F7F5F0;
+  display: grid;
+  place-items: center;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: #1C254166;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 20;
+}
+
+.modalcard {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  width: 100%;
+  max-width: 460px;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 30px 10px;
+  font-size: 13px;
+}
+
+.deletePhoto {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  padding: 3px 6px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+/* =========================
+   VOICE ASSISTANT WIDGET
+========================= */
+
+.voice-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--brass);
+  border: none;
+  font-size: 30px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 18px rgba(28,37,65,.35);
+  z-index: 30;
+  transition: transform .15s ease;
+}
+
+.voice-fab:active {
+  transform: scale(0.94);
+}
+
+.voice-fab.listening {
+  background: var(--danger);
+  color: #fff;
+  animation: voicePulse 1.1s infinite;
+}
+
+.voice-fab.processing {
+  background: var(--pending);
+  color: #fff;
+}
+
+.voice-fab.speaking {
+  background: var(--progress);
+  color: #fff;
+}
+
+.voice-fab.error {
+  background: var(--danger);
+  color: #fff;
+}
+
+@keyframes voicePulse {
+  0% { box-shadow: 0 0 0 0 rgba(179,70,44,.45); }
+  70% { box-shadow: 0 0 0 16px rgba(179,70,44,0); }
+  100% { box-shadow: 0 0 0 0 rgba(179,70,44,0); }
+}
+
+.voice-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 98px;
+  left: 16px;
+  max-width: 380px;
+  margin-left: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(28,37,65,.28);
+  padding: 18px;
+  z-index: 30;
+}
+
+.voice-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.voice-panel-title {
+  font: 700 17px "Space Grotesk";
+  color: var(--navy);
+}
+
+.voice-close {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  color: var(--muted);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.voice-mic-big {
+  display: block;
+  margin: 6px auto 10px;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: none;
+  background: var(--navy);
+  color: var(--brass);
+  font-size: 42px;
+  display: grid;
+  place-items: center;
+}
+
+.voice-mic-big.listening {
+  background: var(--danger);
+  color: #fff;
+  animation: voicePulse 1.1s infinite;
+}
+
+.voice-mic-big.processing {
+  background: var(--pending);
+  color: #fff;
+}
+
+.voice-mic-big.speaking {
+  background: var(--progress);
+  color: #fff;
+}
+
+.voice-mic-big.error {
+  background: var(--danger);
+  color: #fff;
+}
+
+.voice-state-label {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+
+.voice-said {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.voice-response {
+  background: var(--navy);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.voice-warning {
+  background: #FCEFE9;
+  color: var(--danger);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.voice-shortcuts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.voice-shortcut {
+  font-size: 12px;
+  padding: 12px 8px;
+  min-height: 44px;
+}
+
+@media(max-width:520px) {
+  .voice-fab {
+    width: 62px;
+    height: 62px;
+    font-size: 26px;
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .voice-panel {
+    right: 10px;
+    left: 10px;
+    bottom: 86px;
+    max-width: none;
+  }
+}
+
+@media(max-width:520px) {
+  main {
+    padding: 15px;
+  }
+
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    padding: 10px 14px;
+  }
+
+  .who {
+    font-size: 11px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script>
+
+const KEY = {
+  staff: 'gw_staff',
+  customers: 'gw_customers'
+};
+
+let state = {
+  screen: 'loading',
+  tab: 'staff',
+  user: null,
+  phone: null,
+  customer: null,
+  customers: [],
+  staff: [],
+  error: '',
+  search: '',
+  modal: false,
+  tempOrderPhotos: [],
+  voice: {
+    panelOpen: false,
+    status: 'idle',
+    transcript: '',
+    response: '',
+    flow: null,
+    supported: ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
+  }
+};
+
+
+/* =========================
+   API HELPERS
+========================= */
+
+async function get(k) {
+  const r = await fetch(
+    '/api/data?key=' + encodeURIComponent(k)
+  );
+
+  if (!r.ok) {
+    throw new Error('API fetch failed');
+  }
+
+  const payload = await r.json();
+
+  return payload.value ?? null;
+}
+
+
+async function set(k, v) {
+  const r = await fetch(
+    '/api/data?key=' + encodeURIComponent(k),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        value: v
+      })
+    }
+  );
+
+  if (!r.ok) {
+    throw new Error('API save failed');
+  }
+
+  return true;
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+const id = () =>
+  'GW-' + String(Date.now()).slice(-6);
+
+const iso = () =>
+  new Date().toISOString();
+
+const fmt = x =>
+  x
+    ? new Date(x).toLocaleString(
+        undefined,
+        {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }
+      )
+    : '—';
+
+const statusLabel = s =>
+  ({
+    pending: 'పెండింగ్',
+    in_progress: 'ప్రోగ్రెస్‌లో',
+    completed: 'పూర్తయింది',
+    delivered: 'డెలివరీ అయింది'
+  }[s] || s);
+
+const step = s =>
+  ({
+    pending: 0,
+    in_progress: 1,
+    completed: 2,
+    delivered: 3
+  }[s] ?? 0);
+
+
+/* =========================
+   TEXT
+========================= */
+
+const T = {
+
+  staffAdmin:
+    'Staff / Admin (స్టాఫ్ / అడ్మిన్)',
+
+  customer:
+    'Customer (కస్టమర్)',
+
+  username:
+    'Username (వాడుకరి పేరు)',
+
+  password:
+    'Password (పాస్వర్డ్)',
+
+  login:
+    'Login (లాగిన్)',
+
+  loginDemo:
+    'Demo admin: admin / goodwill123',
+
+  fullName:
+    'Full name (పూర్తి పేరు)',
+
+  voice:
+    'Voice (వాయిస్)',
+
+  voiceStatus:
+    'Speak customer name (కస్టమర్ పేరు చెప్పండి...)',
+
+  noVoice:
+    'Voice input is not supported in this browser (ఈ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ లేదు.)',
+
+  voiceStatusLoginUsername:
+    'Tap the mic and say your username (మైక్ నొక్కి వాడుకరి పేరు చెప్పండి)',
+
+  voiceStatusLoginPassword:
+    'Tap the mic and say your password (మైక్ నొక్కి పాస్వర్డ్ చెప్పండి)',
+
+  voiceStatusAddress:
+    'Tap the mic and speak the address (మైక్ నొక్కి చిరునామా చెప్పండి)',
+
+  mobile:
+    'Mobile number (మొబైల్ నంబర్)',
+
+  mobilePlaceholder:
+    '10-digit mobile number (10-అంకెల మొబైల్ నంబర్)',
+
+  address:
+    'Address (చిరునామా)',
+
+  optional:
+    'Optional (ఆప్షన్)',
+
+  notes:
+    'Notes (నోట్స్)',
+
+  enrollCustomer:
+    'Enroll customer (కస్టమర్ని నమోదు చేయండి)',
+
+  updateCustomer:
+    'Edit customer (కస్టమర్ వివరాలు మార్చండి)',
+
+  firstClothDetails:
+    'First cloth details (మొదటి వస్త్ర వివరాలు)',
+
+  shirtCount:
+    'Shirt count (షర్ట్ గణన)',
+
+  pantCount:
+    'Pant count (ప్యాంట్ గణన)',
+
+  sizes:
+    'Sizes / measurements (పరిమాణాలు / కొలతలు)',
+
+  paymentTotal:
+    'Total payment (మొత్తం చెల్లింపు)',
+
+  advancePaid:
+    'Advance paid (ఆగ్నేకు చెల్లించిన)',
+
+  clothImages:
+    'Cloth images (select multiple) (వస్త్రాల చిత్రాలు (బహుళంగా ఎంచుకోండి))',
+
+  noPhotos:
+    'No photos selected (చిత్రాలు ఎంచుకోబడలేదు)',
+
+  saveCustomer:
+    'Save customer (కస్టమర్ని సేవ్ చేయండి)',
+
+  saveChanges:
+    'Save changes (మార్పులను సేవ్ చేయండి)',
+
+  cancel:
+    'Cancel (రద్దు)',
+
+  search:
+    'Search (శోధించండి)',
+
+  customerId:
+    'Customer ID (కస్టమర్ ఐడి)',
+
+  orderNew:
+    'New order (కొత్త ఆర్డర్)',
+
+  viewOrders:
+    'View my orders (నా ఆర్డర్‌లను చూడండి)',
+
+  addCustomer:
+    '+ Add customer (కస్టమర్ని జోడించండి)',
+
+  noCustomer:
+    'No customers enrolled yet (ఇంకా కస్టమర్లు నమోదు కాలేదు)',
+
+  noOrders:
+    'No orders yet (ఇంకా ఆర్డర్‌లు లేవు)',
+
+  noRecord:
+    'No record found for this number (ఈ నంబర్‌కు రికార్డు లేదు.)',
+
+  invalidPhone:
+    'Enter a valid 10-digit mobile number (చెల్లుబాటు అయ్యే 10-అంకెల మొబైల్ నంబర్ ఇవ్వండి.)',
+
+  findEnroll:
+    'Find or enroll a customer (కస్టమర్ని కనుగొని నమోదు చేయండి)',
+
+  recentCustomers:
+    'Recent customers (ఇటీవల కస్టమర్లు)',
+
+  removeStaff:
+    'Remove staff login (స్టాఫ్ లాగిన్‌ను తొలగించండి)',
+
+  staffLogin:
+    'Add staff login (స్టాఫ్ లాగిన్)',
+
+  addStaff:
+    'Add staff (స్టాఫ్‌ను జోడించండి)',
+
+  allCustomers:
+    'All customers (అన్ని కస్టమర్లు)',
+
+  overview:
+    'Overview (అవలోకనం)',
+
+  customers:
+    'Customers (కస్టమర్లు)',
+
+  orders:
+    'Orders (ఆర్డర్‌లు)',
+
+  staffLogins:
+    'Staff logins (స్టాఫ్ లాగిన్స్)',
+
+  customerNotFound:
+    'Customer not found (కస్టమర్ కనుగొనబడలేదు.)',
+
+  back:
+    '← Back (వెనుకకు)',
+
+  add:
+    '+ Add (జోడించండి)',
+
+  admin:
+    'Admin (అడ్మిన్)',
+
+  staff:
+    'Staff (స్టాఫ్)',
+
+  dueDate:
+    'Due date (అందించే తేదీ)',
+
+  measurements:
+    'Measurements (కొలతలు)',
+
+  total:
+    'Total (మొత్తం)',
+
+  remaining:
+    'Remaining (మిగిలినది)',
+
+  takenBy:
+    'Taken by (చేసినది)',
+
+  forgot:
+    'Not used',
+
+  newOrder:
+    'New order (కొత్త ఆర్డర్)',
+
+  createOrder:
+    'Create order (ఆర్డర్ సృష్టించండి)',
+
+  shirt:
+    'Shirt (షర్ట్)',
+
+  pant:
+    'Pant (ప్యాంట్)',
+
+  genericCloth:
+    'Cloth (వస్త్రం)',
+
+  enteredErrorName:
+    'Enter a valid name and 10-digit mobile number (పూర్తి పేరు మరియు 10-అంకెల మొబైల్ నంబర్ ఇవ్వండి.)',
+
+  paidExceeds:
+    'Advance paid cannot exceed total payment (ఆగ్నేకు చెల్లించిన మొత్తం మొత్తం చెల్లింపును మించలేము.)',
+
+  noQty:
+    'Enter at least one shirt or pant (కనీసం ఒక షర్ట్ లేదా ప్యాంట్ ఇవ్వండి.)',
+
+  orderRequired:
+    'Select a customer first (ముందుగా కస్టమర్ని ఎంచుకోండి.)',
+
+  imageNoDelete:
+    'Image delete is disabled (చిత్రాలను తీసివేయడం లేదు.)',
+
+  statusPending:
+    'Pending (పెండింగ్)',
+
+  statusInProgress:
+    'In progress (ప్రోగ్రెస్‌లో)',
+
+  statusCompleted:
+    'Completed (పూర్తయింది)',
+
+  statusDelivered:
+    'Delivered (డెలివరీ అయింది)',
+
+  customerSaved:
+    'Customer saved (కస్టమర్ సేవ్ అయ్యింది.)',
+
+  queue:
+    'Queue (క్యూలైన్)'
+};
+
+
+/* =========================
+   LOGO
+========================= */
+
+function logo() {
+
+  return `
+    <div class="mark">G</div>
+
+    <div>
+      <div class="brand">Goodwill</div>
+      <div class="sub">TAILOR</div>
+    </div>
+  `;
+}
+
+
+/* =========================
+   LOGIN SCREEN
+========================= */
+
+function login() {
+
+  return `
+    <div class="center">
+
+      <div class="card">
+
+        <div class="logo">
+          ${logo()}
+        </div>
+
+        <div class="tabs">
+
+          <button
+            data-tab="staff"
+            class="${state.tab === 'staff' ? 'active' : ''}">
+            ${T.staffAdmin}
+          </button>
+
+          <button
+            data-tab="customer"
+            class="${state.tab === 'customer' ? 'active' : ''}">
+            ${T.customer}
+          </button>
+
+        </div>
+
+        ${
+          state.tab === 'staff'
+
+            ? `
+
+              <form id="login">
+
+                <div class="field">
+                  <label>${T.username}</label>
+                  <div class="voice-name-wrap">
+                    <input
+                      id="u"
+                      autocomplete="username"
+                      required>
+                    <button
+                      class="btn outline voice-btn"
+                      id="voiceLoginUsername"
+                      type="button">
+                      🎙 ${T.voice}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>${T.password}</label>
+                  <div class="voice-name-wrap">
+                    <input
+                      id="p"
+                      type="password"
+                      autocomplete="current-password"
+                      required>
+                    <button
+                      class="btn outline voice-btn"
+                      id="voiceLoginPassword"
+                      type="button">
+                      🎙 ${T.voice}
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="voice-note"
+                  id="loginVoiceStatus">
+                  ${T.voiceStatusLoginUsername}
+                </div>
+
+                <button class="btn primary full">
+                  ${T.login}
+                </button>
+
+              </form>
+
+            `
+
+            : `
+
+              <form id="clogin">
+
+                <div class="field">
+
+                  <label>${T.mobile}</label>
+
+                  <input
+                    id="phone"
+                    inputmode="numeric"
+                    maxlength="10"
+                    placeholder="${T.mobilePlaceholder}"
+                    required>
+
+                </div>
+
+                <button class="btn primary full">
+                  ${T.viewOrders}
+                </button>
+
+              </form>
+
+            `
+        }
+
+        ${
+          state.error
+            ? `<div class="error">${state.error}</div>`
+            : ''
+        }
+
+        ${
+          state.tab === 'staff'
+            ? `<p class="hint">${T.loginDemo}</p>`
+            : ''
+        }
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+/* =========================
+   APP SHELL
+========================= */
+
+function shell(inner) {
+
+  const role =
+    state.screen === 'admin'
+      ? T.admin
+      : state.screen === 'staff'
+        ? T.staff
+        : T.customer;
+
+  const name =
+    state.user?.name ||
+    state.customer?.name ||
+    state.phone ||
+    '';
+
+  return `
+
+    <div class="topbar">
+
+      <div class="logo">
+        ${logo()}
+      </div>
+
+      <div class="who">
+
+        <div>
+          <span class="role">${role}</span>
+          · ${name}
+        </div>
+
+        <button
+          class="logout"
+          id="logout">
+          లాగ్ అవుట్
+        </button>
+
+      </div>
+
+    </div>
+
+    <main>
+      ${inner}
+    </main>
+
+    ${voiceWidget()}
+
+  `;
+}
+
+
+function content() {
+
+  if (state.screen === 'admin') {
+    return admin();
+  }
+
+  if (state.screen === 'staff') {
+    return staff();
+  }
+
+  return customerView();
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render() {
+
+  const root =
+    document.getElementById('root');
+
+  if (state.screen === 'login') {
+
+    root.innerHTML = login();
+
+  } else {
+
+    root.innerHTML =
+      shell(content()) +
+      modalHtml();
+
+  }
+
+  attach();
+}
+
+
+/* =========================
+   MODALS
+========================= */
+
+function modalHtml() {
+
+  if (state.modal === true) {
+    return staffModal();
+  }
+
+  if (state.modal === 'customer') {
+    return customerModal();
+  }
+
+  if (state.modal === 'editCustomer') {
+    return customerModal(true);
+  }
+
+  if (state.modal === 'order') {
+    return orderModal();
+  }
+
+  return '';
+}
+
+
+/* =========================
+   ADMIN
+========================= */
+
+function admin() {
+
+  if (state.customer) {
+    return detail(true);
+  }
+
+  const orders =
+    state.customers.reduce(
+      (n, c) =>
+        n + (c.orders?.length || 0),
+      0
+    );
+
+  return `
+
+    <div class="title">
+      ${T.overview}
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="num">
+          ${state.customers.length}
+        </div>
+        <div class="lbl">
+          ${T.customers}
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="num">
+          ${orders}
+        </div>
+        <div class="lbl">
+          ${T.orders}
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="num">
+          ${state.staff.length}
+        </div>
+        <div class="lbl">
+          ${T.staffLogins}
+        </div>
+      </div>
+
+    </div>
+
+    <div
+      class="title"
+      style="display:flex;justify-content:space-between">
+
+      ${T.staffLogins}
+
+      <button
+        class="btn outline"
+        id="addStaff">
+        ${T.addStaff}
+      </button>
+
+    </div>
+
+    ${state.staff
+      .map(
+        s => `
+
+          <div class="item">
+
+            <div>
+
+              <div class="primary-text">
+                ${esc(s.name)}
+                ${s.isAdmin ? ' (admin)' : ''}
+              </div>
+
+              <div class="secondary">
+                ${T.username}: ${esc(s.username)}
+              </div>
+
+            </div>
+
+            ${
+              !s.isAdmin
+                ? `
+                  <button
+                    class="btn danger"
+                    data-remove="${s.id}">
+                    ${T.removeStaff}
+                  </button>
+                `
+                : ''
+            }
+
+          </div>
+
+        `
+      )
+      .join('')}
+
+    <div class="title">
+      ${T.allCustomers}
+    </div>
+
+    ${customerList()}
+
+  `;
+}
+
+
+/* =========================
+   STAFF
+========================= */
+
+function staff() {
+
+  return `
+
+    <div class="title">
+      ${T.findEnroll}
+    </div>
+
+    ${customerSearch()}
+
+    ${
+      state.customer
+
+        ? detail(true)
+
+        : `
+
+          <div
+            style="
+              display:flex;
+              justify-content:space-between;
+              align-items:center;
+              margin:18px 0 10px">
+
+            <h3
+              style="
+                margin:0;
+                font-size:16px;
+                color:var(--navy)">
+              ${T.recentCustomers}
+            </h3>
+
+            <button
+              class="btn outline"
+              id="addCustomer">
+              ${T.addCustomer}
+            </button>
+
+          </div>
+
+          ${customerList()}
+
+        `
+    }
+
+  `;
+}
+
+
+/* =========================
+   CUSTOMER SEARCH
+========================= */
+
+function customerSearch() {
+
+  return `
+
+    <form
+      class="toolbar"
+      id="searchForm">
+
+      <input
+        class="search"
+        id="search"
+        value="${esc(state.search)}"
+        inputmode="numeric"
+        maxlength="10"
+        placeholder="${T.mobilePlaceholder}">
+
+      <button class="btn primary">
+        ${T.search}
+      </button>
+
+    </form>
+
+    ${
+      state.error
+        ? `<div class="error">${state.error}</div>`
+        : ''
+    }
+
+  `;
+}
+
+
+/* =========================
+   CUSTOMER LIST
+========================= */
+
+function customerList() {
+
+  if (!state.customers.length) {
+
+    return `
+      <div class="empty">
+        ${T.noCustomer}
+      </div>
+    `;
+
+  }
+
+  return state.customers
+    .slice()
+    .reverse()
+    .slice(0, 20)
+    .map(
+      p => `
+
+        <div
+          class="item"
+          data-open="${p.phone}"
+          style="cursor:pointer">
+
+          <div>
+
+            <div class="primary-text">
+              ${esc(p.name || T.customer)}
+            </div>
+
+            <div class="secondary">
+              ${esc(p.id || p.phone)}
+              ·
+              ${p.phone}
+            </div>
+
+          </div>
+
+          <span>›</span>
+
+        </div>
+
+      `
+    )
+    .join('');
+}
+
+
+/* =========================
+   CUSTOMER VIEW
+========================= */
+
+function customerView() {
+  return detail(false);
+}
+
+
+/* =========================
+   CUSTOMER DETAIL
+========================= */
+
+function detail(edit) {
+
+  const c = state.customer;
+
+  if (!c) {
+
+    return `
+      <div class="empty">
+        ${T.customerNotFound}
+      </div>
+    `;
+
+  }
+
+  const profile = `
+
+    <div class="order">
+
+      <div class="orderhead">
+
+        <div>
+
+          <div class="orderid">
+            ${T.customerId}:
+            ${esc(c.id || '—')}
+          </div>
+
+          <div class="date">
+            ${T.mobile}:
+            ${esc(c.phone || '—')}
+          </div>
+
+        </div>
+
+        ${
+          edit
+            ? `
+              <button
+                class="btn outline"
+                id="editCustomer">
+                ${T.updateCustomer}
+              </button>
+            `
+            : ''
+        }
+
+      </div>
+
+      <div
+        class="grid2"
+        style="margin-top:10px">
+
+        <div>
+
+          <b>${T.address}</b>
+
+          <div class="secondary">
+            ${esc(c.address || T.optional)}
+          </div>
+
+        </div>
+
+        <div>
+
+          <b>${T.notes}</b>
+
+          <div class="secondary">
+            ${esc(c.notes || '—')}
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+  const list =
+    (c.orders || []).length
+
+      ? c.orders
+          .slice()
+          .reverse()
+          .map(o => orderCard(o, edit))
+          .join('')
+
+      : `
+        <div class="empty">
+          ${T.noOrders}
+        </div>
+      `;
+
+  const actionRow =
+
+    edit
+
+      ? `
+        <div
+          style="
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+            margin:12px 0">
+
+          <button
+            class="btn outline"
+            id="newOrder">
+            ${T.newOrder}
+          </button>
+
+          <button
+            class="btn outline"
+            id="back">
+            ${T.back}
+          </button>
+
+        </div>
+      `
+
+      : `
+        <div style="margin:12px 0">
+
+          <button
+            class="btn outline"
+            id="back">
+            ${T.back}
+          </button>
+
+        </div>
+      `;
+
+  return `
+    ${profile}
+    ${actionRow}
+    ${list}
+  `;
+}
+
+
+/* =========================
+   ORDER CARD
+========================= */
+
+function orderCard(o, edit) {
+
+  const i = step(o.status);
+
+  const photos =
+    (o.photos || [])
+      .map(
+        (x, index) => `
+
+          <div
+            class="photo"
+            style="position:relative">
+
+            <img src="${x}">
+
+            ${
+              edit && state.screen === 'staff'
+                ? `
+                  <button
+                    type="button"
+                    class="deletePhoto"
+                    data-delete-order-photo="${index}"
+                    data-order-id="${o.id}">
+                    ×
+                  </button>
+                `
+                : ''
+            }
+
+          </div>
+
+        `
+      )
+      .join('');
+
+  const remaining =
+    Math.max(
+      0,
+      (o.total || 0) -
+      ((o.advancePaid || o.paid || 0))
+    );
+
+  const counts =
+    o.garments
+
+      ? Object.entries(o.garments)
+          .filter(([, count]) => count > 0)
+          .map(
+            ([name, count]) =>
+              `${name[0].toUpperCase() + name.slice(1)} × ${count}`
+          )
+          .join(', ')
+
+      : `${o.type || T.genericCloth} × ${o.quantity || 1}`;
+
+  const takenBy =
+    o.takenBy || 'Not recorded';
+
+  return `
+
+    <div class="order">
+
+      <div class="orderhead">
+
+        <div>
+
+          <div class="orderid">
+            ${esc(o.id)}
+            ·
+            ${esc(counts)}
+          </div>
+
+          <div class="date">
+            ${fmt(o.createdAt)}
+            ·
+            ${T.dueDate}
+            ${esc(o.dueDate || '—')}
+          </div>
+
+          <div class="secondary">
+            ${T.takenBy}:
+            ${esc(takenBy)}
+          </div>
+
+        </div>
+
+        <span class="pill ${o.status}">
+          ${statusLabel(o.status)}
+        </span>
+
+      </div>
+
+
+      <div class="steps">
+
+        ${[0,1,2,3]
+          .map(
+            (n, k) =>
+              `
+                ${
+                  k
+                    ? `
+                      <div
+                        class="line ${i >= k ? 'done' : ''}">
+                      </div>
+                    `
+                    : ''
+                }
+
+                <div
+                  class="dot ${i >= n ? 'done' : ''}">
+                </div>
+              `
+          )
+          .join('')}
+
+      </div>
+
+
+      <div class="labels">
+
+        <span>${T.statusPending}</span>
+        <span>${T.statusInProgress}</span>
+        <span>${T.statusCompleted}</span>
+        <span>${T.statusDelivered}</span>
+
+      </div>
+
+
+      <div
+        class="grid2"
+        style="margin-top:12px">
+
+        <div>
+
+          <b>${T.measurements}</b>
+
+          <div class="secondary">
+            ${esc(o.measurements || T.optional)}
+          </div>
+
+        </div>
+
+        <div>
+
+          <b>${T.notes}</b>
+
+          <div class="secondary">
+            ${esc(o.notes || '—')}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      ${
+        photos
+          ? `
+            <div class="photos">
+              ${photos}
+            </div>
+          `
+          : ''
+      }
+
+
+      <div class="payment">
+
+        <div class="payrow">
+
+          <span>${T.advancePaid}</span>
+
+          <strong>
+            ₹${o.advancePaid || o.paid || 0}
+          </strong>
+
+        </div>
+
+        <div class="payrow">
+
+          <span>${T.total}</span>
+
+          <strong>
+            ₹${o.total || 0}
+          </strong>
+
+        </div>
+
+        <div class="payrow remaining">
+
+          <span>${T.remaining}</span>
+
+          <strong>
+            ₹${remaining}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      ${
+        edit
+
+          ? `
+            <div
+              style="
+                display:flex;
+                gap:8px;
+                margin-top:10px">
+
+              <select
+                class="search"
+                data-status="${o.id}">
+
+                <option
+                  value="pending"
+                  ${o.status === 'pending' ? 'selected' : ''}>
+                  ${T.statusPending}
+                </option>
+
+                <option
+                  value="in_progress"
+                  ${o.status === 'in_progress' ? 'selected' : ''}>
+                  ${T.statusInProgress}
+                </option>
+
+                <option
+                  value="completed"
+                  ${o.status === 'completed' ? 'selected' : ''}>
+                  ${T.statusCompleted}
+                </option>
+
+                <option
+                  value="delivered"
+                  ${o.status === 'delivered' ? 'selected' : ''}>
+                  ${T.statusDelivered}
+                </option>
+
+              </select>
+
+              <button
+                class="btn primary"
+                data-save-status="${o.id}">
+                Update
+              </button>
+
+            </div>
+          `
+          : ''
+      }
+
+    </div>
+
+  `;
+}
+
+
+/* =========================
+   STAFF MODAL
+========================= */
+
+function staffModal() {
+
+  return `
+
+    <div class="modal">
+
+      <div class="modalcard">
+
+        <h3>
+          ${T.staffLogin}
+        </h3>
+
+        <div class="field">
+
+          <label>
+            ${T.fullName}
+          </label>
+
+          <input id="sn">
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            ${T.username}
+          </label>
+
+          <input id="su">
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            ${T.password}
+          </label>
+
+          <input
+            id="sp"
+            type="password">
+
+        </div>
+
+        <div class="grid2">
+
+          <button
+            class="btn outline"
+            id="cancel">
+            ${T.cancel}
+          </button>
+
+          <button
+            class="btn primary"
+            id="confirm">
+            ${T.addStaff}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================
+   CUSTOMER MODAL
+========================= */
+
+function customerModal(edit = false) {
+
+  const c =
+    edit
+      ? (state.customer || {})
+      : {};
+
+  const firstOrder =
+    edit
+      ? ((c.orders || [])[0] || {})
+      : {};
+
+  const shirtCount =
+    firstOrder.garments?.shirt ||
+    (
+      firstOrder.type === 'shirt'
+        ? firstOrder.quantity
+        : 0
+    ) ||
+    0;
+
+  const pantCount =
+    firstOrder.garments?.pant ||
+    (
+      firstOrder.type === 'pant'
+        ? firstOrder.quantity
+        : 0
+    ) ||
+    0;
+
+  return `
+
+    <div class="modal">
+
+      <div class="modalcard">
+
+        <h3>
+          ${
+            edit
+              ? T.updateCustomer
+              : T.enrollCustomer
+          }
+        </h3>
+
+
+        <div class="field">
+
+          <label>
+            ${T.fullName}
+          </label>
+
+          <div class="voice-name-wrap">
+
+            <input
+              id="cname"
+              value="${esc(c.name || '')}">
+
+            <button
+              class="btn outline voice-btn"
+              id="voiceCustomerName"
+              type="button">
+
+              🎙 ${T.voice}
+
+            </button>
+
+          </div>
+
+          <div
+            class="voice-note"
+            id="voiceStatus">
+
+            ${T.voiceStatus}
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ${T.mobile}
+          </label>
+
+          <input
+            id="cphone"
+            value="${esc(c.phone || '')}"
+            inputmode="numeric"
+            maxlength="10"
+            placeholder="${T.mobilePlaceholder}"
+            ${edit ? 'readonly' : ''}>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ${T.address}
+          </label>
+
+          <div
+            class="voice-name-wrap"
+            style="align-items:flex-start">
+
+            <textarea
+              id="caddress"
+              placeholder="${T.optional}">${esc(c.address || '')}</textarea>
+
+            <button
+              class="btn outline voice-btn"
+              id="voiceCustomerAddress"
+              type="button">
+              🎙 ${T.voice}
+            </button>
+
+          </div>
+
+          <div
+            class="voice-note"
+            id="addressVoiceStatus">
+            ${T.voiceStatusAddress}
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ${T.notes}
+          </label>
+
+          <textarea
+            id="cnotes"
+            placeholder="${T.optional}">${esc(c.notes || '')}</textarea>
+
+        </div>
+
+
+        <h3
+          style="
+            font-size:15px;
+            margin:20px 0 10px">
+
+          ${T.firstClothDetails}
+
+        </h3>
+
+
+        <div class="grid2">
+
+          <div class="field">
+
+            <label>
+              ${T.shirtCount}
+            </label>
+
+            <input
+              id="shirtQuantity"
+              type="number"
+              min="0"
+              max="50"
+              value="${shirtCount}">
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              ${T.pantCount}
+            </label>
+
+            <input
+              id="pantQuantity"
+              type="number"
+              min="0"
+              max="50"
+              value="${pantCount}">
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ${T.sizes}
+          </label>
+
+          <textarea
+            id="customerSizes"
+            placeholder="చెப்பு, వెస్ట్, భుజం, స్లీవ్, పొడవు...">${esc(firstOrder.measurements || '')}</textarea>
+
+        </div>
+
+
+        <div class="grid2">
+
+          <div class="field">
+
+            <label>
+              ${T.paymentTotal}
+            </label>
+
+            <input
+              id="customerTotal"
+              type="number"
+              min="0"
+              value="${firstOrder.total || ''}"
+              placeholder="0">
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              ${T.advancePaid}
+            </label>
+
+            <input
+              id="customerPaid"
+              type="number"
+              min="0"
+              value="${firstOrder.advancePaid || firstOrder.paid || ''}"
+              placeholder="0">
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ${T.clothImages}
+          </label>
+
+          <input
+            id="customerPhotos"
+            type="file"
+            accept="image/*"
+            multiple>
+
+        </div>
+
+
+        <div
+          id="customerTempPhotosWrap"
+          class="photos">
+        </div>
+
+
+        <div class="grid2">
+
+          <button
+            class="btn outline"
+            id="cancelCustomer">
+
+            ${T.cancel}
+
+          </button>
+
+
+          <button
+            class="btn primary"
+            id="saveCustomerBtn">
+
+            ${
+              edit
+                ? T.saveChanges
+                : T.saveCustomer
+            }
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================
+   ORDER MODAL
+========================= */
+
+function orderModal() {
+
+  return `
+
+    <div class="modal">
+
+      <div class="modalcard">
+
+        <h3>
+          ${T.newOrder}
+        </h3>
+
+
+        <div class="grid2">
+
+          <div class="field">
+
+            <label>
+              ${T.shirtCount}
+            </label>
+
+            <input
+              id="shirtQuantity"
+              type="number"
+              min="0"
+              max="50"
+              value="0">
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              ${T.pantCount}
+            </label>
+
+            <input
+              id="pantQuantity"
+              type="number"
+              min="0"
+              max="50"
+              value="0">
+
+          </div>
+
+        </div>
+
+
+        <div class="grid2">
+
+          <div class="field">
+
+            <label>
+              ${T.dueDate}
+            </label>
+
+            <input
+              id="due"
+              type="date">
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              ${T.total}
+            </label>
+
+            <input
+              id="total"
+              type="number"
+              min="0">
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ${T.advancePaid}
+          </label>
+
+          <input
+            id="paid"
+            type="number"
+            min="0"
+            placeholder="0">
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ${T.measurements}
+          </label>
+
+          <textarea
+            id="measure"
+            placeholder="చెப்பு, వెస్ట్, భుజం, స్లీవ్..."></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ${T.notes}
+          </label>
+
+          <textarea id="notes"></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ${T.clothImages}
+          </label>
+
+          <input
+            id="photos"
+            type="file"
+            accept="image/*"
+            multiple>
+
+        </div>
+
+
+        <div
+          id="tempPhotosWrap"
+          class="photos">
+        </div>
+
+
+        <div class="grid2">
+
+          <button
+            class="btn outline"
+            id="cancelOrder">
+            ${T.cancel}
+          </button>
+
+          <button
+            class="btn primary"
+            id="saveOrder">
+            ${T.createOrder}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function esc(x) {
+
+  return String(x ?? '')
+    .replace(
+      /[&<>"']/g,
+      m =>
+        ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[m])
+    );
+}
+
+
+/* =========================
+   TEMP PHOTOS
+========================= */
+
+function renderTempPhotos() {
+
+  const wrap =
+    document.getElementById('tempPhotosWrap') ||
+    document.getElementById('customerTempPhotosWrap');
+
+  if (!wrap) {
+    return;
+  }
+
+  wrap.innerHTML =
+    state.tempOrderPhotos.length
+
+      ? state.tempOrderPhotos
+          .map(
+            (p, i) => `
+
+              <div
+                class="photo"
+                style="position:relative">
+
+                <img src="${p.src}">
+
+                <button
+                  type="button"
+                  class="deletePhoto"
+                  data-remove-temp-photo="${i}">
+                  ×
+                </button>
+
+              </div>
+
+            `
+          )
+          .join('')
+
+      : `
+        <div
+          class="empty"
+          style="padding:10px 0">
+          No photos selected
+        </div>
+      `;
+}
+
+
+function bindTempPhotoDeletes() {
+
+  document
+    .querySelectorAll('[data-remove-temp-photo]')
+    .forEach(btn => {
+
+      btn.onclick = () => {
+
+        const idx =
+          Number(
+            btn.dataset.removeTempPhoto
+          );
+
+        state.tempOrderPhotos.splice(
+          idx,
+          1
+        );
+
+        renderTempPhotos();
+        bindTempPhotoDeletes();
+
+      };
+
+    });
+}
+
+
+async function handlePhotoSelection(event) {
+
+  const files =
+    [...event.target.files]
+      .slice(0, 5);
+
+  state.tempOrderPhotos = [];
+
+  for (const f of files) {
+
+    state.tempOrderPhotos.push({
+      id: Date.now() + Math.random(),
+      src: await fileToDataUrl(f),
+      name: f.name
+    });
+
+  }
+
+  renderTempPhotos();
+  bindTempPhotoDeletes();
+}
+
+
+function fileToDataUrl(file) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const r =
+        new FileReader();
+
+      r.onload = () =>
+        resolve(r.result);
+
+      r.onerror = reject;
+
+      r.readAsDataURL(file);
+
+    }
+  );
+}
+
+
+/* =========================
+   VOICE
+========================= */
+
+function speechVoices() {
+
+  try {
+
+    return (
+      window.speechSynthesis
+        ?.getVoices?.() || []
+    );
+
+  } catch (e) {
+
+    return [];
+
+  }
+}
+
+
+function chooseVoice() {
+
+  const voices =
+    speechVoices();
+
+  const telugu =
+    voices.find(
+      v =>
+        /te|telugu/i.test(
+          v.lang || ''
+        ) ||
+        /te/i.test(
+          v.name || ''
+        )
+    ) || null;
+
+  const india =
+    voices.find(
+      v =>
+        /in/i.test(
+          v.lang || ''
+        )
+    ) || null;
+
+  return (
+    telugu ||
+    india ||
+    voices[0] ||
+    null
+  );
+}
+
+
+function speak(text) {
+
+  try {
+
+    if (!('speechSynthesis' in window)) {
+      return;
+    }
+
+    const voices =
+      speechVoices();
+
+    const voice =
+      chooseVoice();
+
+    window.speechSynthesis.cancel();
+
+    const msg =
+      new SpeechSynthesisUtterance(text);
+
+    msg.lang = 'te-IN';
+    msg.rate = 0.92;
+    msg.pitch = 1.1;
+    msg.volume = 1;
+
+    if (voice) {
+      msg.voice = voice;
+    }
+
+    if (!voices.length) {
+
+      window.speechSynthesis.onvoiceschanged =
+        () => {
+
+          const nextVoice =
+            chooseVoice();
+
+          if (nextVoice) {
+            msg.voice = nextVoice;
+          }
+
+          window.speechSynthesis.speak(msg);
+
+        };
+
+    }
+
+    window.speechSynthesis.speak(msg);
+
+  } catch (e) {
+
+    // Ignore audio errors.
+
+  }
+}
+
+
+function startCustomerNameVoice() {
+
+  const nameInput =
+    document.getElementById('cname');
+
+  const status =
+    document.getElementById('voiceStatus');
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    if (status) {
+      status.textContent =
+        'ఈ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ లేదు.';
+    }
+
+    speak(
+      'ఈ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ లేదు. మీ పేరు టైప్ చేయండి.'
+    );
+
+    return;
+  }
+
+  const recognition =
+    new SpeechRecognition();
+
+  recognition.lang = 'te-IN';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  if (status) {
+
+    status.classList.add('listening');
+
+    status.textContent =
+      'కస్టమర్ పేరు చెప్పండి...';
+
+  }
+
+  recognition.start();
+
+  recognition.onresult =
+    event => {
+
+      const transcript =
+        event.results?.[0]?.[0]?.transcript ||
+        '';
+
+      const clean =
+        transcript.trim();
+
+      if (nameInput && clean) {
+
+        nameInput.value =
+          clean.replace(
+            /\s+/g,
+            ' '
+          );
+
+      }
+
+      if (status) {
+
+        status.classList.remove(
+          'listening'
+        );
+
+        status.textContent =
+          clean
+            ? `కస్టమర్ పేరు: ${clean}`
+            : 'వాయిస్ పాసైంది.';
+
+      }
+
+      if (clean) {
+        speak(
+          `కస్టమర్ పేరు ${clean}.`
+        );
+      }
+
+    };
+
+  recognition.onerror =
+    () => {
+
+      if (status) {
+
+        status.classList.remove(
+          'listening'
+        );
+
+        status.textContent =
+          'వాయిస్ అర్థం కాలేదు. పేరు ఇవ్వండి.';
+
+      }
+
+      speak(
+        'వాయిస్ అర్థం కాలేదు. పేరు టైప్ చేయండి.'
+      );
+
+    };
+
+  recognition.onend =
+    () => {
+
+      if (status) {
+        status.classList.remove(
+          'listening'
+        );
+      }
+
+    };
+}
+
+
+/* =========================
+   GENERIC FIELD SPEECH-TO-TEXT
+   (reusable mic button for any
+   input/textarea — login fields,
+   customer address, etc.)
+========================= */
+
+function startFieldVoice(config) {
+
+  const {
+    inputId,
+    statusId,
+    lang = 'en-IN',
+    stripSpaces = false,
+    listeningText = '🎙 Listening... (వింటున్నాను...)',
+    errorText = '⚠️ Could not understand. Please try again. (అర్థం కాలేదు. మళ్ళీ ప్రయత్నించండి.)',
+    doneText = clean => `✅ ${clean}`
+  } = config || {};
+
+  const input =
+    document.getElementById(inputId);
+
+  const status =
+    statusId
+      ? document.getElementById(statusId)
+      : null;
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    if (status) {
+      status.textContent = T.noVoice;
+    }
+
+    return;
+  }
+
+  const recognition =
+    new SpeechRecognition();
+
+  recognition.lang = lang;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  if (status) {
+
+    status.classList.add('listening');
+    status.textContent = listeningText;
+
+  }
+
+  recognition.start();
+
+  recognition.onresult =
+    event => {
+
+      const transcript =
+        event.results?.[0]?.[0]?.transcript ||
+        '';
+
+      let clean =
+        transcript
+          .trim()
+          .replace(/\s+/g, ' ');
+
+      if (stripSpaces) {
+        clean = clean.replace(/\s+/g, '');
+      }
+
+      if (input && clean) {
+        input.value = clean;
+      }
+
+      if (status) {
+
+        status.classList.remove(
+          'listening'
+        );
+
+        status.textContent =
+          clean
+            ? doneText(clean)
+            : '⚠️ No speech detected. (వాయిస్ వినిపించలేదు.)';
+
+      }
+
+    };
+
+  recognition.onerror =
+    () => {
+
+      if (status) {
+
+        status.classList.remove(
+          'listening'
+        );
+
+        status.textContent = errorText;
+
+      }
+
+    };
+
+  recognition.onend =
+    () => {
+
+      if (status) {
+        status.classList.remove(
+          'listening'
+        );
+      }
+
+    };
+}
+
+
+/* =========================
+   VOICE ASSISTANT
+   (Telugu voice-first layer. Reuses existing
+   saveCustomer/state functions — no new backend
+   or data model is introduced.)
+========================= */
+
+let voiceRecognition = null;
+
+/* ---------- WIDGET MARKUP ---------- */
+
+function voiceStatusLabel() {
+  switch (state.voice.status) {
+    case 'listening':
+      return '🔴 Listening... (వినుచున్నాను...)';
+    case 'processing':
+      return '⏳ Understanding... (అర్థం చేసుకుంటున్నాను...)';
+    case 'speaking':
+      return '🔊 Speaking... (చెబుతున్నాను...)';
+    case 'error':
+      return '⚠️ Could not understand. Please try again. (అర్థం కాలేదు. మళ్ళీ ప్రయత్నించండి.)';
+    default:
+      return '🎤 Tap to speak (మాట్లాడటానికి తాకండి)';
+  }
+}
+
+function voiceMicGlyph() {
+  const s = state.voice.status;
+  if (s === 'listening') return '🔴';
+  if (s === 'processing') return '⏳';
+  if (s === 'speaking') return '🔊';
+  if (s === 'error') return '⚠️';
+  return '🎤';
+}
+
+function voiceWidget() {
+
+  if (state.screen !== 'admin' && state.screen !== 'staff') {
+    return '';
+  }
+
+  const v = state.voice;
+
+  return `
+
+    <button
+      id="voiceFab"
+      class="voice-fab ${v.status}"
+      type="button"
+      aria-label="Voice Assistant">
+      ${v.panelOpen ? '✕' : '🎤'}
+    </button>
+
+    ${
+      v.panelOpen
+        ? `
+          <div class="voice-panel">
+
+            <div class="voice-panel-head">
+              <div class="voice-panel-title">🎤 మాట్లాడండి</div>
+              <button id="voiceClose" class="voice-close" type="button">✕</button>
+            </div>
+
+            <button
+              id="voiceMicBig"
+              class="voice-mic-big ${v.status}"
+              type="button"
+              ${v.status === 'processing' ? 'disabled' : ''}>
+              ${voiceMicGlyph()}
+            </button>
+
+            <div class="voice-state-label">
+              ${voiceStatusLabel()}
+            </div>
+
+            ${v.transcript ? `<div class="voice-said">🗣 "${esc(v.transcript)}"</div>` : ''}
+
+            ${v.response ? `<div class="voice-response">🔊 ${esc(v.response)}</div>` : ''}
+
+            ${
+              (v.status === 'listening' || v.status === 'speaking')
+                ? `<button id="voiceStop" class="btn danger full" type="button">🛑 Stop (ఆపు)</button>`
+                : ''
+            }
+
+            ${
+              !v.flow
+                ? `
+                  <div class="voice-shortcuts">
+                    <button class="btn outline voice-shortcut" type="button" data-voice-shortcut="add_customer">🎤 కొత్త కస్టమర్</button>
+                    <button class="btn outline voice-shortcut" type="button" data-voice-shortcut="create_order">🎤 కొత్త ఆర్డర్</button>
+                    <button class="btn outline voice-shortcut" type="button" data-voice-shortcut="search_customer">🎤 కస్టమర్ వెతుకు</button>
+                    <button class="btn outline voice-shortcut" type="button" data-voice-shortcut="pending_orders">🎤 పెండింగ్ ఆర్డర్లు</button>
+                    <button class="btn outline voice-shortcut" type="button" data-voice-shortcut="today_deliveries">🎤 ఈరోజు డెలివరీలు</button>
+                  </div>
+                `
+                : ''
+            }
+
+            ${
+              !v.supported
+                ? `<div class="voice-warning">ఈ బ్రౌజర్‌లో వాయిస్ సౌకర్యం అందుబాటులో లేదు. Chrome ఉపయోగించండి.</div>`
+                : ''
+            }
+
+          </div>
+        `
+        : ''
+    }
+
+  `;
+}
+
+
+/* ---------- TELUGU NUMBER WORDS ---------- */
+
+const TELUGU_DIGIT_WORDS = {
+  'సున్నా': 0, 'జీరో': 0,
+  'ఒకటి': 1, 'ఒక': 1,
+  'రెండు': 2,
+  'మూడు': 3,
+  'నాలుగు': 4,
+  'ఐదు': 5,
+  'ఆరు': 6,
+  'ఏడు': 7,
+  'ఎనిమిది': 8,
+  'తొమ్మిది': 9
+};
+
+const TELUGU_TENS_WORDS = {
+  'పది': 10, 'ఇరవై': 20, 'ముప్పై': 30, 'నలభై': 40, 'యాభై': 50,
+  'అరవై': 60, 'డెబ్బై': 70, 'ఎనభై': 80, 'తొంభై': 90
+};
+
+const TELUGU_SCALE_WORDS = {
+  'వంద': 100, 'వందలు': 100, 'వందల': 100,
+  'వెయ్యి': 1000, 'వేలు': 1000, 'వేల': 1000,
+  'లక్ష': 100000, 'లక్షలు': 100000, 'లక్షల': 100000
+};
+
+const TELUGU_UNIT_NAMES = ['', 'ఒకటి', 'రెండు', 'మూడు', 'నాలుగు', 'ఐదు', 'ఆరు', 'ఏడు', 'ఎనిమిది', 'తొమ్మిది'];
+const TELUGU_TENS_NAMES = ['', 'పది', 'ఇరవై', 'ముప్పై', 'నలభై', 'యాభై', 'అరవై', 'డెబ్బై', 'ఎనభై', 'తొంభై'];
+
+function numberToTeluguWords(n) {
+
+  n = Math.round(Number(n) || 0);
+
+  if (n === 0) {
+    return 'సున్నా';
+  }
+
+  if (n < 0) {
+    return 'మైనస్ ' + numberToTeluguWords(-n);
+  }
+
+  const lakhs = Math.floor(n / 100000);
+  n %= 100000;
+
+  const thousands = Math.floor(n / 1000);
+  n %= 1000;
+
+  const hundreds = Math.floor(n / 100);
+  n %= 100;
+
+  const tens = Math.floor(n / 10);
+  const units = n % 10;
+
+  const parts = [];
+
+  if (lakhs) {
+    parts.push(`${numberToTeluguWords(lakhs)} ${(thousands || hundreds || tens || units) ? 'లక్షల' : 'లక్షలు'}`);
+  }
+
+  if (thousands) {
+    parts.push(`${TELUGU_UNIT_NAMES[thousands] || thousands} ${(hundreds || tens || units) ? 'వేల' : 'వేలు'}`);
+  }
+
+  if (hundreds) {
+    parts.push(`${TELUGU_UNIT_NAMES[hundreds]} ${(tens || units) ? 'వందల' : 'వందలు'}`);
+  }
+
+  if (tens && units) {
+    parts.push(`${TELUGU_TENS_NAMES[tens]} ${TELUGU_UNIT_NAMES[units]}`);
+  } else if (tens) {
+    parts.push(TELUGU_TENS_NAMES[tens]);
+  } else if (units) {
+    parts.push(TELUGU_UNIT_NAMES[units]);
+  }
+
+  return parts.join(' ').trim();
+}
+
+function parseSpokenAmount(text) {
+
+  const raw = String(text || '').trim();
+
+  if (!raw) {
+    return null;
+  }
+
+  const compact = raw.replace(/[₹,\s]/g, '');
+
+  if (/^\d+$/.test(compact)) {
+    return Number(compact);
+  }
+
+  const digitMatch = raw.match(/\d+/);
+
+  const tokens = raw.split(/\s+/).filter(Boolean);
+
+  let matchedAny = false;
+  let total = 0;
+  let current = 0;
+
+  for (const tok of tokens) {
+
+    if (/^\d+$/.test(tok)) {
+      current += Number(tok);
+      matchedAny = true;
+      continue;
+    }
+
+    if (tok in TELUGU_DIGIT_WORDS) {
+      current += TELUGU_DIGIT_WORDS[tok];
+      matchedAny = true;
+      continue;
+    }
+
+    if (tok in TELUGU_TENS_WORDS) {
+      current += TELUGU_TENS_WORDS[tok];
+      matchedAny = true;
+      continue;
+    }
+
+    if (tok in TELUGU_SCALE_WORDS) {
+
+      const scale = TELUGU_SCALE_WORDS[tok];
+
+      current = (current || 1) * scale;
+
+      if (scale >= 1000) {
+        total += current;
+        current = 0;
+      }
+
+      matchedAny = true;
+      continue;
+    }
+  }
+
+  total += current;
+
+  if (matchedAny) {
+    return total;
+  }
+
+  if (digitMatch) {
+    return Number(digitMatch[0]);
+  }
+
+  return null;
+}
+
+function normalizePhoneNumber(text) {
+
+  const raw = String(text || '').trim();
+
+  const digitsOnly = raw.replace(/\D/g, '');
+
+  if (digitsOnly.length === 10) {
+    return digitsOnly;
+  }
+
+  const tokens = raw.split(/\s+/).filter(Boolean);
+
+  let digits = '';
+
+  for (const tok of tokens) {
+
+    if (/^\d$/.test(tok)) {
+      digits += tok;
+      continue;
+    }
+
+    if (tok in TELUGU_DIGIT_WORDS) {
+      digits += String(TELUGU_DIGIT_WORDS[tok]);
+      continue;
+    }
+  }
+
+  if (digits.length === 10) {
+    return digits;
+  }
+
+  return null;
+}
+
+function parseSpokenDate(text) {
+
+  const t = String(text || '').trim();
+
+  if (!t) {
+    return null;
+  }
+
+  const today = new Date();
+
+  if (/రేపు|repu/i.test(t)) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().slice(0, 10);
+  }
+
+  if (/ఎల్లుండి/i.test(t)) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + 2);
+    return d.toISOString().slice(0, 10);
+  }
+
+  if (/ఈరోజు|today/i.test(t)) {
+    return today.toISOString().slice(0, 10);
+  }
+
+  const monthNames = {
+    'జనవరి': 0, 'ఫిబ్రవరి': 1, 'మార్చి': 2, 'ఏప్రిల్': 3, 'మే': 4, 'జూన్': 5,
+    'జూలై': 6, 'ఆగస్టు': 7, 'సెప్టెంబర్': 8, 'అక్టోబర్': 9, 'నవంబర్': 10, 'డిసెంబర్': 11
+  };
+
+  let month = today.getMonth();
+  let year = today.getFullYear();
+  let matchedMonth = false;
+
+  for (const name in monthNames) {
+
+    if (t.includes(name)) {
+      month = monthNames[name];
+      matchedMonth = true;
+      break;
+    }
+  }
+
+  const dayMatch = t.match(/(\d{1,2})/);
+
+  if (dayMatch) {
+
+    const day = Number(dayMatch[1]);
+
+    if (day >= 1 && day <= 31) {
+
+      let d = new Date(year, month, day);
+
+      if (!matchedMonth && d < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+        d = new Date(year, month + 1, day);
+      }
+
+      return d.toISOString().slice(0, 10);
+    }
+  }
+
+  return null;
+}
+
+
+/* ---------- CORE VOICE PLUMBING ---------- */
+
+function speakTelugu(text, after) {
+
+  state.voice.response = text;
+  state.voice.status = 'speaking';
+  render();
+
+  try {
+
+    if (!('speechSynthesis' in window)) {
+      state.voice.status = 'idle';
+      render();
+      if (after) after();
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const voice = chooseVoice();
+
+    const msg = new SpeechSynthesisUtterance(text);
+
+    msg.lang = 'te-IN';
+    msg.rate = 0.95;
+    msg.pitch = 1.05;
+    msg.volume = 1;
+
+    if (voice) {
+      msg.voice = voice;
+    }
+
+    const finish = () => {
+      if (state.voice.status === 'speaking') {
+        state.voice.status = 'idle';
+      }
+      render();
+      if (after) after();
+    };
+
+    msg.onend = finish;
+    msg.onerror = finish;
+
+    window.speechSynthesis.speak(msg);
+
+  } catch (e) {
+
+    state.voice.status = 'idle';
+    render();
+    if (after) after();
+  }
+}
+
+function startVoiceRecognition() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    state.voice.status = 'error';
+    state.voice.response = 'ఈ బ్రౌజర్‌లో వాయిస్ సౌకర్యం అందుబాటులో లేదు. Chrome ఉపయోగించండి.';
+    render();
+    return;
+  }
+
+  try {
+    window.speechSynthesis?.cancel();
+  } catch (e) {
+    // ignore
+  }
+
+  let recognition;
+
+  try {
+    recognition = new SpeechRecognition();
+  } catch (e) {
+    state.voice.status = 'error';
+    state.voice.response = 'మైక్రోఫోన్ ప్రారంభించలేకపోయాము.';
+    render();
+    return;
+  }
+
+  voiceRecognition = recognition;
+
+  recognition.lang = 'te-IN';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  state.voice.status = 'listening';
+  state.voice.transcript = '';
+  render();
+
+  let handled = false;
+
+  recognition.onresult = event => {
+
+    handled = true;
+
+    const transcript =
+      event.results?.[0]?.[0]?.transcript || '';
+
+    const clean = transcript.trim();
+
+    state.voice.transcript = clean;
+    state.voice.status = 'processing';
+    render();
+
+    setTimeout(() => handleVoiceTranscript(clean), 100);
+  };
+
+  recognition.onerror = () => {
+
+    handled = true;
+
+    state.voice.status = 'error';
+    render();
+
+    speakTelugu('అర్థం కాలేదు. మళ్ళీ ప్రయత్నించండి.');
+  };
+
+  recognition.onend = () => {
+
+    if (!handled && state.voice.status === 'listening') {
+      state.voice.status = 'idle';
+      render();
+    }
+  };
+
+  try {
+    recognition.start();
+  } catch (e) {
+
+    state.voice.status = 'error';
+    state.voice.response = 'మైక్రోఫోన్ ప్రారంభించలేకపోయాము.';
+    render();
+  }
+}
+
+function stopVoiceRecognition() {
+
+  try {
+    voiceRecognition?.stop();
+  } catch (e) {
+    // ignore
+  }
+
+  try {
+    window.speechSynthesis?.cancel();
+  } catch (e) {
+    // ignore
+  }
+
+  if (state.voice.status === 'listening' || state.voice.status === 'speaking') {
+    state.voice.status = 'idle';
+  }
+}
+
+function toggleVoicePanel() {
+
+  state.voice.panelOpen = !state.voice.panelOpen;
+
+  if (!state.voice.panelOpen) {
+
+    stopVoiceRecognition();
+
+    state.voice.status = 'idle';
+    state.voice.flow = null;
+    state.voice.transcript = '';
+    state.voice.response = '';
+  }
+
+  render();
+}
+
+function isAffirmative(text) {
+  return /(అవును|సరే|avunu|sare|^yes$|^ok$)/i.test(String(text || '').trim());
+}
+
+function isNegative(text) {
+  return /(వద్దు|కాదు|రద్దు|^no$|cancel)/i.test(String(text || '').trim());
+}
+
+async function handleVoiceTranscript(text) {
+
+  if (!text) {
+
+    state.voice.status = 'error';
+    render();
+
+    speakTelugu('ఏమీ వినిపించలేదు. మళ్ళీ ప్రయత్నించండి.');
+
+    return;
+  }
+
+  if (state.voice.flow) {
+    await advanceVoiceFlow(text);
+    return;
+  }
+
+  const intent = parseVoiceIntent(text);
+
+  await dispatchVoiceIntent(intent);
+}
+
+
+/* ---------- INTENT PARSER ---------- */
+
+const VOICE_NAME_STOPWORDS = [
+  'గారి', 'గారిని', 'గారు', 'గారికి', 'కస్టమర్', 'కస్టమర్ని', 'ఆర్డర్', 'ఆర్డర్లు', 'ఆర్డర్‌లు',
+  'చూపించు', 'వెతుకు', 'వెతకు', 'చూడాలి', 'చూడాలంటే', 'తీసుకో', 'తీసుకోండి', 'జోడించు', 'కొత్త',
+  'పాత', 'పాతవి', 'పెండింగ్‌లో', 'పెట్టు', 'పూర్తయింది', 'ఎంత', 'ఎన్ని', 'ఎప్పుడు', 'ఇవ్వాలి',
+  'డబ్బు', 'చెల్లించారు', 'మిగిలింది', 'ధర', 'కోసం', 'వివరాలు', 'ఇచ్చారు', 'యొక్క', 'ki', 'కి', 'ను', 'ని', 'లో'
+];
+
+function extractCustomerNameFromText(text) {
+
+  let words = String(text || '').split(/\s+/).filter(Boolean);
+
+  words = words.filter(
+    w => !VOICE_NAME_STOPWORDS.some(sw => w === sw || w.includes(sw))
+  );
+
+  const name = words.join(' ').trim();
+
+  return name || null;
+}
+
+function parseVoiceIntent(rawText) {
+
+  const text = String(rawText || '').trim();
+
+  if (/(కొత్త కస్టమర్|కస్టమర్.*జోడించు|add customer|new customer)/i.test(text)) {
+    return { type: 'ADD_CUSTOMER' };
+  }
+
+  if (/(కొత్త ఆర్డర్|ఆర్డర్ తీసుకో|షర్ట్ ఆర్డర్|ప్యాంట్ ఆర్డర్|new order|create order)/i.test(text)) {
+    return { type: 'CREATE_ORDER', name: extractCustomerNameFromText(text) };
+  }
+
+  if (/(డెలివర్|delivered|ఇచ్చేసాను|డెలివరీ చేశాను)/i.test(text)) {
+    return { type: 'UPDATE_ORDER_STATUS', status: 'delivered' };
+  }
+
+  if (/(పూర్తయింది|completed|complete అయింది)/i.test(text)) {
+    return { type: 'UPDATE_ORDER_STATUS', status: 'completed' };
+  }
+
+  if (/(పని మొదలైంది|ప్రోగ్రెస్‌లో|in progress)/i.test(text)) {
+    return { type: 'UPDATE_ORDER_STATUS', status: 'in_progress' };
+  }
+
+  if (/(పెండింగ్‌లో పెట్టు|పెండింగ్ చేయి|mark pending)/i.test(text)) {
+    return { type: 'UPDATE_ORDER_STATUS', status: 'pending' };
+  }
+
+  if (/(ఈరోజు ఆర్డర్లు|today.*order)/i.test(text)) {
+    return { type: 'VIEW_DASHBOARD', which: 'today_orders' };
+  }
+
+  if (/(పెండింగ్ ఆర్డర్లు|pending order)/i.test(text)) {
+    return { type: 'VIEW_DASHBOARD', which: 'pending_orders' };
+  }
+
+  if (/(ఈరోజు డెలివరీలు|today.*deliver)/i.test(text)) {
+    return { type: 'VIEW_DASHBOARD', which: 'today_deliveries' };
+  }
+
+  if (/(ఎంత డబ్బు తీసుకున్నాం|ఎంత చెల్లించారు|how much paid)/i.test(text)) {
+    return { type: 'READ_PAYMENT' };
+  }
+
+  if (/(ఇంకా ఎంత|మిగిలింది|remaining|balance)/i.test(text)) {
+    return { type: 'READ_BALANCE' };
+  }
+
+  if (/(ఎప్పుడు ఇవ్వాలి|due date)/i.test(text)) {
+    return { type: 'READ_DUE_DATE' };
+  }
+
+  if (/(ఎవరు తీసుకున్నారు|who took)/i.test(text)) {
+    return { type: 'READ_TAKEN_BY' };
+  }
+
+  if (/(ఈ ఆర్డర్ ఎంత|order.*total|ఆర్డర్ వివరాలు|order details)/i.test(text)) {
+    return { type: 'VIEW_ORDER' };
+  }
+
+  if (/(పాత ఆర్డర్లు|ఎన్ని ఆర్డర్లు|order history)/i.test(text)) {
+    return { type: 'VIEW_CUSTOMER_HISTORY', name: extractCustomerNameFromText(text) };
+  }
+
+  if (/(వెతుకు|వెతకు|చూపించు|చూడాలి|search|show)/i.test(text)) {
+    return { type: 'SEARCH_CUSTOMER', name: extractCustomerNameFromText(text) };
+  }
+
+  return { type: 'UNKNOWN', text };
+}
+
+async function dispatchVoiceIntent(intent) {
+
+  switch (intent.type) {
+
+    case 'SEARCH_CUSTOMER':
+      return voiceSearchCustomer(intent.name);
+
+    case 'ADD_CUSTOMER':
+      return startVoiceFlow('add_customer');
+
+    case 'CREATE_ORDER':
+      return startVoiceFlow('create_order', { name: intent.name });
+
+    case 'UPDATE_ORDER_STATUS':
+      return voiceUpdateOrderStatus(intent.status);
+
+    case 'VIEW_ORDER':
+      return voiceReadOrderInfo('full');
+
+    case 'READ_PAYMENT':
+      return voiceReadOrderInfo('payment');
+
+    case 'READ_BALANCE':
+      return voiceReadOrderInfo('balance');
+
+    case 'READ_DUE_DATE':
+      return voiceReadOrderInfo('due');
+
+    case 'READ_TAKEN_BY':
+      return voiceReadOrderInfo('takenBy');
+
+    case 'VIEW_CUSTOMER_HISTORY':
+      return voiceCustomerHistory(intent.name);
+
+    case 'VIEW_DASHBOARD':
+      return voiceDashboard(intent.which);
+
+    default:
+      state.voice.status = 'error';
+      render();
+      speakTelugu('అర్థం కాలేదు. మళ్ళీ చెప్పండి.');
+  }
+}
+
+
+/* ---------- READ-ONLY INTENTS ---------- */
+
+function voiceGetLatestOrder() {
+
+  const c = state.customer;
+
+  if (!c || !(c.orders || []).length) {
+    return null;
+  }
+
+  return c.orders[c.orders.length - 1];
+}
+
+function voiceSearchCustomer(name) {
+
+  if (!name) {
+    state.voice.status = 'idle';
+    render();
+    speakTelugu('ఎవరి పేరు చెప్పండి?');
+    return;
+  }
+
+  const norm = s => String(s || '').toLowerCase().trim();
+
+  const matches = (state.customers || []).filter(
+    c => c.name && (norm(c.name).includes(norm(name)) || norm(name).includes(norm(c.name)))
+  );
+
+  if (!matches.length) {
+    state.voice.status = 'idle';
+    render();
+    speakTelugu('ఈ పేరుతో కస్టమర్ కనిపించలేదు.');
+    return;
+  }
+
+  if (matches.length === 1) {
+
+    state.customer = matches[0];
+    state.error = '';
+    render();
+
+    speakTelugu(`${matches[0].name} గారి వివరాలు తెరిచాను.`);
+    return;
+  }
+
+  const names = matches.slice(0, 5).map(c => c.name).join(', ');
+
+  state.voice.status = 'idle';
+  render();
+
+  speakTelugu(`${matches.length} మంది కస్టమర్లు దొరికారు: ${names}. పూర్తి పేరు చెప్పండి.`);
+}
+
+function voiceReadOrderInfo(kind) {
+
+  const c = state.customer;
+  const o = voiceGetLatestOrder();
+
+  if (!c) {
+    state.voice.status = 'idle';
+    render();
+    speakTelugu('ముందుగా కస్టమర్‌ని తెరవండి లేదా పేరు చెప్పండి.');
+    return;
+  }
+
+  if (!o) {
+    state.voice.status = 'idle';
+    render();
+    speakTelugu(`${c.name} గారికి ఇంకా ఆర్డర్‌లు లేవు.`);
+    return;
+  }
+
+  const total = Number(o.total || 0);
+  const paid = Number(o.advancePaid || o.paid || 0);
+  const remaining = Math.max(0, total - paid);
+
+  let text;
+
+  if (kind === 'payment') {
+    text = `మొత్తం ${numberToTeluguWords(total)} రూపాయలు. ${numberToTeluguWords(paid)} రూపాయలు చెల్లించారు.`;
+  } else if (kind === 'balance') {
+    text = `ఇంకా ${numberToTeluguWords(remaining)} రూపాయలు తీసుకోవాలి.`;
+  } else if (kind === 'due') {
+    text = o.dueDate ? `అందించే తేదీ ${o.dueDate}.` : 'అందించే తేదీ నమోదు కాలేదు.';
+  } else if (kind === 'takenBy') {
+    text = `ఈ ఆర్డర్‌ను ${o.takenBy || 'స్టాఫ్'} తీసుకున్నారు.`;
+  } else {
+    text = `మొత్తం ధర ${numberToTeluguWords(total)} రూపాయలు. ${numberToTeluguWords(paid)} చెల్లించారు. ఇంకా ${numberToTeluguWords(remaining)} తీసుకోవాలి. స్థితి: ${statusLabel(o.status)}.`;
+  }
+
+  speakTelugu(text);
+}
+
+function voiceCustomerHistory(name) {
+
+  let c = state.customer;
+
+  if (name) {
+
+    const norm = s => String(s || '').toLowerCase();
+
+    const matches = (state.customers || []).filter(
+      x => x.name && norm(x.name).includes(norm(name))
+    );
+
+    if (matches.length === 1) {
+      c = matches[0];
+    }
+  }
+
+  if (!c) {
+    state.voice.status = 'idle';
+    render();
+    speakTelugu('ముందుగా కస్టమర్‌ని తెరవండి లేదా పేరు చెప్పండి.');
+    return;
+  }
+
+  const orders = c.orders || [];
+
+  if (!orders.length) {
+    state.voice.status = 'idle';
+    render();
+    speakTelugu(`${c.name} గారికి ఇంకా ఆర్డర్‌లు లేవు.`);
+    return;
+  }
+
+  const pending = orders.filter(o => o.status !== 'delivered').length;
+
+  speakTelugu(`${c.name} గారు మొత్తం ${numberToTeluguWords(orders.length)} ఆర్డర్‌లు ఇచ్చారు. ${numberToTeluguWords(pending)} ఇంకా పూర్తి కావాల్సి ఉంది.`);
+}
+
+function voiceDashboard(which) {
+
+  const allOrders = [];
+
+  (state.customers || []).forEach(
+    c => (c.orders || []).forEach(o => allOrders.push(o))
+  );
+
+  const todayStr = iso().slice(0, 10);
+
+  if (which === 'pending_orders') {
+
+    const n = allOrders.filter(o => o.status === 'pending' || o.status === 'in_progress').length;
+
+    speakTelugu(`పెండింగ్ ఆర్డర్‌లు ${numberToTeluguWords(n)}.`);
+    return;
+  }
+
+  if (which === 'today_deliveries') {
+
+    const n = allOrders.filter(o => String(o.dueDate || '').slice(0, 10) === todayStr).length;
+
+    speakTelugu(`ఈరోజు డెలివరీలు ${numberToTeluguWords(n)}.`);
+    return;
+  }
+
+  const n = allOrders.filter(o => String(o.createdAt || '').slice(0, 10) === todayStr).length;
+
+  speakTelugu(`ఈరోజు ఆర్డర్‌లు ${numberToTeluguWords(n)}.`);
+}
+
+async function voiceUpdateOrderStatus(status) {
+
+  const c = state.customer;
+  const o = voiceGetLatestOrder();
+
+  if (!c || !o) {
+    state.voice.status = 'idle';
+    render();
+    speakTelugu('ముందుగా కస్టమర్ మరియు ఆర్డర్‌ని తెరవండి.');
+    return;
+  }
+
+  if (o.status === status) {
+    state.voice.status = 'idle';
+    render();
+    speakTelugu(`ఈ ఆర్డర్ ఇప్పటికే ${statusLabel(status)}గా ఉంది.`);
+    return;
+  }
+
+  state.voice.flow = {
+    type: 'confirm_status',
+    step: 'confirm',
+    data: { status }
+  };
+
+  askVoiceQuestion(`ఈ ఆర్డర్‌ను ${statusLabel(status)} అని మార్చనా?`);
+}
+
+
+/* ---------- CONVERSATIONAL FLOWS ---------- */
+
+function askVoiceQuestion(question) {
+
+  speakTelugu(question, () => {
+    startVoiceRecognition();
+  });
+}
+
+function cancelVoiceFlow(message) {
+
+  state.voice.flow = null;
+  render();
+
+  speakTelugu(message || 'రద్దు చేసాను.');
+}
+
+function startVoiceFlow(type, initial = {}) {
+
+  state.voice.flow = {
+    type,
+    step: null,
+    data: { ...initial }
+  };
+
+  advanceVoiceFlow(null);
+}
+
+async function advanceVoiceFlow(userText) {
+
+  const flow = state.voice.flow;
+
+  if (!flow) {
+    return;
+  }
+
+  if (flow.type === 'add_customer') {
+    return advanceAddCustomerFlow(userText);
+  }
+
+  if (flow.type === 'create_order') {
+    return advanceCreateOrderFlow(userText);
+  }
+
+  if (flow.type === 'confirm_status') {
+    return advanceConfirmStatusFlow(userText);
+  }
+
+  if (flow.type === 'quick_search') {
+    state.voice.flow = null;
+    return voiceSearchCustomer(String(userText || '').trim());
+  }
+}
+
+function advanceConfirmStatusFlow(userText) {
+
+  const flow = state.voice.flow;
+
+  if (isAffirmative(userText)) {
+    finalizeStatusUpdate(flow.data.status);
+  } else {
+    cancelVoiceFlow('సరే, మార్చలేదు.');
+  }
+}
+
+async function finalizeStatusUpdate(status) {
+
+  const o = voiceGetLatestOrder();
+
+  if (!o) {
+    state.voice.flow = null;
+    render();
+    speakTelugu('ఆర్డర్ కనిపించలేదు.');
+    return;
+  }
+
+  o.status = status;
+
+  try {
+
+    await saveCustomer(state.customer);
+
+    state.voice.flow = null;
+    render();
+
+    speakTelugu(`${statusLabel(status)}.`);
+
+  } catch (e) {
+
+    state.voice.flow = null;
+    render();
+
+    speakTelugu('మార్చడంలో పొరపాటు వచ్చింది.');
+  }
+}
+
+function advanceAddCustomerFlow(userText) {
+
+  const flow = state.voice.flow;
+  const d = flow.data;
+
+  if (flow.step === null) {
+    flow.step = 'name';
+    askVoiceQuestion('కస్టమర్ పేరు చెప్పండి.');
+    return;
+  }
+
+  if (flow.step === 'name') {
+
+    const name = String(userText || '').trim();
+
+    if (!name) {
+      askVoiceQuestion('పేరు వినిపించలేదు. మళ్ళీ చెప్పండి.');
+      return;
+    }
+
+    d.name = name;
+    flow.step = 'phone';
+
+    askVoiceQuestion(`${name}. ఫోన్ నంబర్ చెప్పండి.`);
+    return;
+  }
+
+  if (flow.step === 'phone') {
+
+    const phone = normalizePhoneNumber(userText);
+
+    if (!phone) {
+      askVoiceQuestion('ఫోన్ నంబర్ సరిగ్గా అర్థం కాలేదు. 10 అంకెలు చెప్పండి.');
+      return;
+    }
+
+    d.phone = phone;
+    flow.step = 'address';
+
+    askVoiceQuestion('చిరునామా చెప్పండి. అవసరం లేకపోతే వద్దు అనండి.');
+    return;
+  }
+
+  if (flow.step === 'address') {
+
+    const t = String(userText || '').trim();
+
+    if (!isNegative(t)) {
+      d.address = t;
+    }
+
+    flow.step = 'confirm';
+
+    askVoiceQuestion(`కస్టమర్ పేరు ${d.name}. ఫోన్ నంబర్ ${d.phone}. సేవ్ చేయనా?`);
+    return;
+  }
+
+  if (flow.step === 'confirm') {
+
+    if (isAffirmative(userText)) {
+      finalizeAddCustomer(d);
+    } else {
+      cancelVoiceFlow('సరే, రద్దు చేసాను.');
+    }
+
+    return;
+  }
+}
+
+async function finalizeAddCustomer(d) {
+
+  const existing = (state.customers || []).find(c => c.phone === d.phone);
+
+  const customer = {
+    id: (existing && existing.id) || makeCustomerId(),
+    name: d.name,
+    phone: d.phone,
+    address: d.address || '',
+    notes: '',
+    orders: (existing && existing.orders) || []
+  };
+
+  try {
+
+    await saveCustomer(customer);
+
+    state.customer = customer;
+    state.voice.flow = null;
+    state.error = '';
+    render();
+
+    speakTelugu('కస్టమర్ విజయవంతంగా సేవ్ అయింది.');
+
+  } catch (e) {
+
+    state.voice.flow = null;
+    render();
+
+    speakTelugu('కస్టమర్‌ని సేవ్ చేయడంలో పొరపాటు వచ్చింది.');
+  }
+}
+
+function extractGarmentCounts(text) {
+
+  const t = String(text || '');
+
+  let shirt = 0;
+  let pant = 0;
+
+  const shirtMatch = t.match(/([\u0C00-\u0C7Fa-zA-Z0-9]+)\s*(షర్ట్|shirt)/i);
+  const pantMatch = t.match(/([\u0C00-\u0C7Fa-zA-Z0-9]+)\s*(ప్యాంట్|pant)/i);
+
+  if (shirtMatch) {
+    shirt = parseSpokenAmount(shirtMatch[1]) ?? 1;
+  } else if (/షర్ట్|shirt/i.test(t)) {
+    shirt = 1;
+  }
+
+  if (pantMatch) {
+    pant = parseSpokenAmount(pantMatch[1]) ?? 1;
+  } else if (/ప్యాంట్|pant/i.test(t)) {
+    pant = 1;
+  }
+
+  return { shirt, pant };
+}
+
+function advanceCreateOrderFlow(userText) {
+
+  const flow = state.voice.flow;
+  const d = flow.data;
+
+  if (flow.step === null) {
+
+    if (state.customer) {
+
+      d.customer = state.customer;
+      flow.step = 'garments';
+
+      askVoiceQuestion(`${d.customer.name} గారికి ఆర్డర్. ఎన్ని షర్ట్‌లు, ఎన్ని ప్యాంట్‌లు కావాలి?`);
+      return;
+    }
+
+    if (d.name) {
+
+      const norm = s => String(s || '').toLowerCase();
+
+      const matches = (state.customers || []).filter(
+        c => c.name && norm(c.name).includes(norm(d.name))
+      );
+
+      if (matches.length === 1) {
+
+        d.customer = matches[0];
+        state.customer = matches[0];
+        flow.step = 'garments';
+
+        askVoiceQuestion(`${d.customer.name} గారికి ఆర్డర్. ఎన్ని షర్ట్‌లు, ఎన్ని ప్యాంట్‌లు కావాలి?`);
+        return;
+      }
+    }
+
+    flow.step = 'customer_name';
+    askVoiceQuestion('ఏ కస్టమర్ కోసం ఆర్డర్? పేరు చెప్పండి.');
+    return;
+  }
+
+  if (flow.step === 'customer_name') {
+
+    const name = String(userText || '').trim();
+    const norm = s => String(s || '').toLowerCase();
+
+    const matches = (state.customers || []).filter(
+      c => c.name && (norm(c.name).includes(norm(name)) || norm(name).includes(norm(c.name)))
+    );
+
+    if (!matches.length) {
+      askVoiceQuestion('ఈ పేరుతో కస్టమర్ కనిపించలేదు. మళ్ళీ చెప్పండి, లేదా ముందుగా కొత్త కస్టమర్‌ని జోడించండి.');
+      return;
+    }
+
+    if (matches.length > 1) {
+      askVoiceQuestion(`ఒకటి కంటే ఎక్కువ మంది దొరికారు: ${matches.slice(0, 3).map(c => c.name).join(', ')}. పూర్తి పేరు చెప్పండి.`);
+      return;
+    }
+
+    d.customer = matches[0];
+    state.customer = matches[0];
+    flow.step = 'garments';
+
+    askVoiceQuestion(`${d.customer.name} గారికి ఆర్డర్. ఎన్ని షర్ట్‌లు, ఎన్ని ప్యాంట్‌లు కావాలి?`);
+    return;
+  }
+
+  if (flow.step === 'garments') {
+
+    const counts = extractGarmentCounts(userText);
+
+    if (!counts.shirt && !counts.pant) {
+      askVoiceQuestion('కనీసం ఒక షర్ట్ లేదా ప్యాంట్ సంఖ్య చెప్పండి.');
+      return;
+    }
+
+    d.shirt = counts.shirt;
+    d.pant = counts.pant;
+    flow.step = 'total';
+
+    askVoiceQuestion('మొత్తం ధర ఎంత?');
+    return;
+  }
+
+  if (flow.step === 'total') {
+
+    const amt = parseSpokenAmount(userText);
+
+    if (amt === null) {
+      askVoiceQuestion('మొత్తం ధర సరిగ్గా అర్థం కాలేదు. మళ్ళీ చెప్పండి.');
+      return;
+    }
+
+    d.total = amt;
+    flow.step = 'paid';
+
+    askVoiceQuestion(`${numberToTeluguWords(amt)} రూపాయలు. ఎంత అడ్వాన్స్ చెల్లించారు?`);
+    return;
+  }
+
+  if (flow.step === 'paid') {
+
+    let amt;
+
+    if (isNegative(userText) || /సున్నా|zero/i.test(userText)) {
+      amt = 0;
+    } else {
+      amt = parseSpokenAmount(userText);
+    }
+
+    if (amt === null || amt === undefined) {
+      askVoiceQuestion('చెల్లించిన మొత్తం అర్థం కాలేదు. మళ్ళీ చెప్పండి.');
+      return;
+    }
+
+    if (amt > d.total) {
+      askVoiceQuestion('చెల్లించిన మొత్తం, మొత్తం ధర కంటే ఎక్కువగా ఉంది. మళ్ళీ చెప్పండి.');
+      return;
+    }
+
+    d.paid = amt;
+    flow.step = 'due';
+
+    askVoiceQuestion('ఎప్పుడు ఇవ్వాలి?');
+    return;
+  }
+
+  if (flow.step === 'due') {
+
+    const date = parseSpokenDate(userText);
+
+    if (!date) {
+      askVoiceQuestion('తేదీ అర్థం కాలేదు. "రేపు" లేదా తేదీ చెప్పండి.');
+      return;
+    }
+
+    d.due = date;
+    flow.step = 'notes';
+
+    askVoiceQuestion('ఏమైనా నోట్స్ ఉన్నాయా? లేకపోతే వద్దు అనండి.');
+    return;
+  }
+
+  if (flow.step === 'notes') {
+
+    if (!isNegative(userText)) {
+      d.notes = String(userText || '').trim();
+    }
+
+    flow.step = 'confirm';
+
+    const garmentText = [
+      d.shirt ? `${d.shirt} షర్ట్` : '',
+      d.pant ? `${d.pant} ప్యాంట్` : ''
+    ].filter(Boolean).join(', ');
+
+    askVoiceQuestion(`${garmentText}. మొత్తం ${numberToTeluguWords(d.total)} రూపాయలు. ${numberToTeluguWords(d.paid)} చెల్లించారు. సేవ్ చేయనా?`);
+    return;
+  }
+
+  if (flow.step === 'confirm') {
+
+    if (isAffirmative(userText)) {
+      finalizeCreateOrder(d);
+    } else {
+      cancelVoiceFlow('సరే, ఆర్డర్ రద్దు చేసాను.');
+    }
+
+    return;
+  }
+}
+
+async function finalizeCreateOrder(d) {
+
+  const c = d.customer;
+
+  c.orders = c.orders || [];
+
+  const newOrder = {
+    id: 'ORD-' + Date.now().toString().slice(-6),
+    createdAt: iso(),
+    type: (d.shirt && !d.pant) ? 'shirt' : ((d.pant && !d.shirt) ? 'pant' : 'shirt and pant'),
+    quantity: (d.shirt || 0) + (d.pant || 0),
+    garments: { shirt: d.shirt || 0, pant: d.pant || 0 },
+    takenBy: state.user?.name || state.user?.username || 'Staff',
+    dueDate: d.due || '',
+    status: 'pending',
+    total: d.total || 0,
+    advancePaid: d.paid || 0,
+    paid: d.paid || 0,
+    measurements: '',
+    notes: d.notes || '',
+    photos: []
+  };
+
+  c.orders.push(newOrder);
+
+  try {
+
+    await saveCustomer(c);
+
+    state.customer = c;
+    state.voice.flow = null;
+    render();
+
+    speakTelugu('ఆర్డర్ విజయవంతంగా సేవ్ అయింది.');
+
+  } catch (e) {
+
+    state.voice.flow = null;
+    render();
+
+    speakTelugu('ఆర్డర్‌ని సేవ్ చేయడంలో పొరపాటు వచ్చింది.');
+  }
+}
+
+
+/* ---------- SHORTCUT DISPATCH ---------- */
+
+function runVoiceShortcut(name) {
+
+  if (name === 'add_customer') {
+    return startVoiceFlow('add_customer');
+  }
+
+  if (name === 'create_order') {
+    return startVoiceFlow('create_order');
+  }
+
+  if (name === 'search_customer') {
+    state.voice.flow = { type: 'quick_search', step: 'name', data: {} };
+    return askVoiceQuestion('ఎవరి పేరు చెప్పండి?');
+  }
+
+  if (name === 'pending_orders') {
+    return voiceDashboard('pending_orders');
+  }
+
+  if (name === 'today_deliveries') {
+    return voiceDashboard('today_deliveries');
+  }
+}
+
+
+/* =========================
+   CUSTOMER ID
+========================= */
+
+function makeCustomerId() {
+
+  const ids =
+    (state.customers || [])
+      .map(
+        c =>
+          Number(
+            String(c.id || '')
+              .replace(/\D/g, '')
+          )
+      )
+      .filter(
+        n => !Number.isNaN(n)
+      );
+
+  const next =
+    ids.length
+      ? Math.max(...ids) + 1
+      : 1001;
+
+  return `GT-${next}`;
+}
+
+
+/* =========================
+   SAVE CUSTOMER
+========================= */
+
+async function saveCustomer(c) {
+
+  const clean = {
+    ...c
+  };
+
+  if (!clean.id) {
+    clean.id =
+      makeCustomerId();
+  }
+
+  const all =
+    await get(KEY.customers) ||
+    [];
+
+  const idx =
+    all.findIndex(
+      item =>
+        item &&
+        item.phone === clean.phone
+    );
+
+  if (idx >= 0) {
+
+    all[idx] = clean;
+
+  } else {
+
+    all.push(clean);
+
+  }
+
+  state.customers = all;
+
+  await set(
+    KEY.customers,
+    all
+  );
+
+  await set(
+    'customer:' + clean.phone,
+    clean
+  );
+}
+
+
+/* =========================
+   LOAD CUSTOMER
+========================= */
+
+async function loadCustomer(p) {
+
+  const all =
+    await get(KEY.customers) ||
+    [];
+
+  const normalized =
+    String(p)
+      .replace(/\D/g, '');
+
+  const fromList =
+    all.find(
+      c =>
+        String(c.phone || '')
+          .replace(/\D/g, '') ===
+        normalized
+    );
+
+  if (fromList) {
+    return fromList;
+  }
+
+  const byPhone =
+    await get(
+      'customer:' + normalized
+    );
+
+  return (
+    byPhone &&
+    String(byPhone.phone || '')
+      .replace(/\D/g, '') ===
+      normalized
+  )
+    ? byPhone
+    : null;
+}
+
+
+/* =========================
+   EVENT HANDLERS
+========================= */
+
+function attach() {
+
+  /* ---------- TABS ---------- */
+
+  document
+    .querySelectorAll('[data-tab]')
+    .forEach(b => {
+
+      b.onclick = () => {
+
+        state.tab =
+          b.dataset.tab;
+
+        state.error = '';
+
+        render();
+
+      };
+
+    });
+
+
+  /* ---------- VOICE ASSISTANT ---------- */
+
+  document
+    .getElementById('voiceFab')
+    ?.addEventListener(
+      'click',
+      () => {
+        toggleVoicePanel();
+      }
+    );
+
+  document
+    .getElementById('voiceClose')
+    ?.addEventListener(
+      'click',
+      () => {
+        toggleVoicePanel();
+      }
+    );
+
+  document
+    .getElementById('voiceMicBig')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        if (
+          state.voice.status === 'listening' ||
+          state.voice.status === 'speaking'
+        ) {
+          stopVoiceRecognition();
+          render();
+          return;
+        }
+
+        if (state.voice.status === 'processing') {
+          return;
+        }
+
+        startVoiceRecognition();
+      }
+    );
+
+  document
+    .getElementById('voiceStop')
+    ?.addEventListener(
+      'click',
+      () => {
+        stopVoiceRecognition();
+        state.voice.flow = null;
+        render();
+      }
+    );
+
+  document
+    .querySelectorAll('[data-voice-shortcut]')
+    .forEach(b => {
+
+      b.onclick = () => {
+        runVoiceShortcut(b.dataset.voiceShortcut);
+      };
+
+    });
+
+
+  /* ---------- LOGOUT ---------- */
+
+  document
+    .getElementById('logout')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        state = {
+          ...state,
+          screen: 'login',
+          user: null,
+          customer: null,
+          phone: null,
+          error: '',
+          search: '',
+          modal: false,
+          tempOrderPhotos: []
+        };
+
+        render();
+
+      }
+    );
+
+
+  /* ==================================================
+     FIXED STAFF / ADMIN LOGIN
+
+     IMPORTANT:
+     Do NOT compare the password with state.staff.
+
+     Supabase stores password_hash and the API
+     /api/auth is responsible for checking it.
+  ================================================== */
+
+  document
+    .getElementById('voiceLoginUsername')
+    ?.addEventListener(
+      'click',
+      () => startFieldVoice({
+        inputId: 'u',
+        statusId: 'loginVoiceStatus',
+        lang: 'en-IN',
+        listeningText:
+          '🎙 Listening for username... (వాడుకరి పేరు వింటున్నాను...)',
+        doneText: clean =>
+          `✅ Username: ${clean}`
+      })
+    );
+
+  document
+    .getElementById('voiceLoginPassword')
+    ?.addEventListener(
+      'click',
+      () => startFieldVoice({
+        inputId: 'p',
+        statusId: 'loginVoiceStatus',
+        lang: 'en-IN',
+        stripSpaces: true,
+        listeningText:
+          '🎙 Listening for password... (పాస్వర్డ్ వింటున్నాను...)',
+        // Never echo the spoken password back to the screen.
+        doneText: () =>
+          '✅ Password captured.'
+      })
+    );
+
+  document
+    .getElementById('login')
+    ?.addEventListener(
+      'submit',
+      async e => {
+
+        e.preventDefault();
+
+        const u =
+          document
+            .getElementById('u')
+            .value
+            .trim();
+
+        const p =
+          document
+            .getElementById('p')
+            .value;
+
+        state.error = '';
+
+        try {
+
+          const r =
+            await fetch(
+              '/api/auth',
+              {
+                method: 'POST',
+
+                headers: {
+                  'Content-Type':
+                    'application/json'
+                },
+
+                body: JSON.stringify({
+                  username: u,
+                  password: p
+                })
+              }
+            );
+
+          let result;
+
+          try {
+
+            result =
+              await r.json();
+
+          } catch (jsonError) {
+
+            result = {
+              ok: false
+            };
+
+          }
+
+          if (!r.ok || !result.ok) {
+
+            state.error =
+              result?.error ||
+              'Incorrect username or password.';
+
+            render();
+
+            return;
+          }
+
+          if (!result.user) {
+
+            state.error =
+              'Login succeeded but user information was not returned.';
+
+            render();
+
+            return;
+          }
+
+          state.user =
+            result.user;
+
+          state.screen =
+            result.user.isAdmin
+              ? 'admin'
+              : 'staff';
+
+          state.error = '';
+
+          state.customer = null;
+
+          render();
+
+        } catch (err) {
+
+          console.error(
+            'Login error:',
+            err
+          );
+
+          state.error =
+            'Login service unavailable. Please try again.';
+
+          render();
+
+        }
+
+      }
+    );
+
+
+  /* ---------- CUSTOMER LOGIN ---------- */
+
+  document
+    .getElementById('clogin')
+    ?.addEventListener(
+      'submit',
+      async e => {
+
+        e.preventDefault();
+
+        const p =
+          document
+            .getElementById('phone')
+            .value
+            .trim();
+
+        if (!/^\d{10}$/.test(p)) {
+
+          state.error =
+            'Enter a valid 10-digit mobile number.';
+
+          render();
+
+          return;
+        }
+
+        try {
+
+          const c =
+            await loadCustomer(p);
+
+          if (!c) {
+
+            state.error =
+              'No record found for this number.';
+
+            render();
+
+            return;
+          }
+
+          state.phone = p;
+
+          state.customer = c;
+
+          state.screen =
+            'customer';
+
+          state.error = '';
+
+          render();
+
+        } catch (err) {
+
+          console.error(
+            'Customer login error:',
+            err
+          );
+
+          state.error =
+            'Unable to load customer data.';
+
+          render();
+
+        }
+
+      }
+    );
+
+
+  /* ---------- SEARCH ---------- */
+
+  document
+    .getElementById('searchForm')
+    ?.addEventListener(
+      'submit',
+      async e => {
+
+        e.preventDefault();
+
+        const p =
+          document
+            .getElementById('search')
+            .value
+            .trim();
+
+        state.search = p;
+
+        if (!/^\d{10}$/.test(p)) {
+
+          state.error =
+            'Enter a valid 10-digit mobile number.';
+
+          render();
+
+          return;
+        }
+
+        try {
+
+          const c =
+            await loadCustomer(p);
+
+          if (!c) {
+
+            state.error =
+              'Customer not found. Use Add customer below.';
+
+            state.customer = null;
+
+            render();
+
+            return;
+          }
+
+          state.customer = c;
+
+          state.error = '';
+
+          render();
+
+        } catch (err) {
+
+          console.error(err);
+
+          state.error =
+            'Unable to load customer data.';
+
+          render();
+
+        }
+
+      }
+    );
+
+
+  /* ---------- OPEN CUSTOMER ---------- */
+
+  document
+    .querySelectorAll('[data-open]')
+    .forEach(x => {
+
+      x.onclick =
+        async () => {
+
+          try {
+
+            const normalized =
+              String(
+                x.dataset.open || ''
+              ).replace(
+                /\D/g,
+                ''
+              );
+
+            state.customer =
+              state.customers.find(
+                c =>
+                  String(c.phone || '')
+                    .replace(/\D/g, '') ===
+                  normalized
+              ) ||
+              await loadCustomer(
+                normalized
+              );
+
+            state.error = '';
+
+            render();
+
+          } catch (err) {
+
+            console.error(err);
+
+            state.error =
+              'Unable to load customer.';
+
+            render();
+
+          }
+
+        };
+
+    });
+
+
+  /* ---------- ADD STAFF MODAL ---------- */
+
+  document
+    .getElementById('addStaff')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        state.modal = true;
+
+        render();
+
+      }
+    );
+
+
+  /* ---------- ADD CUSTOMER ---------- */
+
+  document
+    .getElementById('addCustomer')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        state.modal =
+          'customer';
+
+        state.tempOrderPhotos =
+          [];
+
+        render();
+
+      }
+    );
+
+
+  /* ---------- EDIT CUSTOMER ---------- */
+
+  document
+    .getElementById('editCustomer')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        state.modal =
+          'editCustomer';
+
+        state.tempOrderPhotos =
+          [];
+
+        render();
+
+      }
+    );
+
+
+  /* ---------- CANCEL STAFF ---------- */
+
+  document
+    .getElementById('cancel')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        state.modal = false;
+
+        render();
+
+      }
+    );
+
+
+  /* ---------- CANCEL CUSTOMER ---------- */
+
+  document
+    .getElementById('cancelCustomer')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        state.modal = false;
+
+        render();
+
+      }
+    );
+
+
+  /* ---------- VOICE ---------- */
+
+  document
+    .getElementById('voiceCustomerName')
+    ?.addEventListener(
+      'click',
+      startCustomerNameVoice
+    );
+
+  document
+    .getElementById('voiceCustomerAddress')
+    ?.addEventListener(
+      'click',
+      () => startFieldVoice({
+        inputId: 'caddress',
+        statusId: 'addressVoiceStatus',
+        lang: 'te-IN',
+        listeningText:
+          '🎙 Listening for address... (చిరునామా వింటున్నాను...)',
+        doneText: clean =>
+          `✅ ${T.address.split(' (')[0]}: ${clean}`
+      })
+    );
+
+
+  /* ==================================================
+     SAVE CUSTOMER
+  ================================================== */
+
+  document
+    .getElementById('saveCustomerBtn')
+    ?.addEventListener(
+      'click',
+      async () => {
+
+        try {
+
+          const name =
+            document
+              .getElementById('cname')
+              .value
+              .trim();
+
+          const phone =
+            document
+              .getElementById('cphone')
+              .value
+              .trim();
+
+          const shirtQuantity =
+            Math.max(
+              0,
+              Number(
+                document
+                  .getElementById(
+                    'shirtQuantity'
+                  )
+                  .value
+              ) || 0
+            );
+
+          const pantQuantity =
+            Math.max(
+              0,
+              Number(
+                document
+                  .getElementById(
+                    'pantQuantity'
+                  )
+                  .value
+              ) || 0
+            );
+
+          const sizes =
+            document
+              .getElementById(
+                'customerSizes'
+              )
+              .value
+              .trim();
+
+          const total =
+            Number(
+              document
+                .getElementById(
+                  'customerTotal'
+                )
+                .value
+            ) || 0;
+
+          const paid =
+            Number(
+              document
+                .getElementById(
+                  'customerPaid'
+                )
+                .value
+            ) || 0;
+
+
+          if (
+            !name ||
+            !/^[0-9]{10}$/.test(phone)
+          ) {
+
+            alert(
+              'Enter a valid name and 10-digit mobile number.'
+            );
+
+            return;
+          }
+
+
+          if (total < paid) {
+
+            alert(
+              'Advance paid cannot exceed total payment.'
+            );
+
+            return;
+          }
+
+
+          const customers =
+            await get(
+              KEY.customers
+            ) || [];
+
+
+          const existing =
+            customers.find(
+              c =>
+                c.phone === phone
+            );
+
+
+          const customer = {
+
+            id:
+              (existing && existing.id) ||
+              makeCustomerId(),
+
+            name,
+
+            phone,
+
+            address:
+              document
+                .getElementById(
+                  'caddress'
+                )
+                .value
+                .trim(),
+
+            notes:
+              document
+                .getElementById(
+                  'cnotes'
+                )
+                .value
+                .trim(),
+
+            clothRef:
+              shirtQuantity &&
+              pantQuantity
+                ? 'shirt and pant'
+                : shirtQuantity
+                  ? 'shirt'
+                  : 'pant',
+
+            orders:
+              (existing &&
+                existing.orders) ||
+              [],
+
+            createdAt:
+              (existing &&
+                existing.createdAt) ||
+              iso()
+
+          };
+
+
+          const oldOrder =
+            customer.orders[0];
+
+
+          const hasClothDetails =
+            shirtQuantity ||
+            pantQuantity ||
+            sizes ||
+            total ||
+            paid ||
+            state.tempOrderPhotos.length;
+
+
+          if (hasClothDetails) {
+
+            const clothOrder =
+              oldOrder ||
+              {
+
+                id:
+                  'ORD-' +
+                  Date.now()
+                    .toString()
+                    .slice(-6),
+
+                createdAt:
+                  iso(),
+
+                status:
+                  'pending'
+
+              };
+
+
+            clothOrder.type =
+              shirtQuantity &&
+              !pantQuantity
+                ? 'shirt'
+                : pantQuantity &&
+                  !shirtQuantity
+                  ? 'pant'
+                  : 'shirt and pant';
+
+
+            clothOrder.quantity =
+              shirtQuantity +
+              pantQuantity;
+
+
+            clothOrder.garments = {
+              shirt: shirtQuantity,
+              pant: pantQuantity
+            };
+
+
+            clothOrder.takenBy =
+              clothOrder.takenBy ||
+              state.user?.name ||
+              state.user?.username ||
+              'Staff';
+
+
+            clothOrder.measurements =
+              sizes;
+
+
+            clothOrder.total =
+              total;
+
+
+            clothOrder.advancePaid =
+              paid;
+
+
+            clothOrder.paid =
+              paid;
+
+
+            if (
+              state.tempOrderPhotos.length
+            ) {
+
+              clothOrder.photos =
+                state.tempOrderPhotos
+                  .map(
+                    p => p.src
+                  );
+
+            } else {
+
+              clothOrder.photos =
+                clothOrder.photos ||
+                [];
+
+            }
+
+
+            if (!oldOrder) {
+
+              customer.orders.unshift(
+                clothOrder
+              );
+
+            }
+
+          }
+
+
+          await saveCustomer(
+            customer
+          );
+
+
+          state.customer =
+            customer;
+
+          state.modal =
+            false;
+
+          state.tempOrderPhotos =
+            [];
+
+          state.error =
+            '';
+
+          render();
+
+        } catch (err) {
+
+          console.error(
+            'Save customer error:',
+            err
+          );
+
+          state.error =
+            'Unable to save customer.';
+
+          render();
+
+        }
+
+      }
+    );
+
+
+  /* ==================================================
+     ADD STAFF
+  ================================================== */
+
+  document
+    .getElementById('confirm')
+    ?.addEventListener(
+      'click',
+      async () => {
+
+        const n =
+          document
+            .getElementById('sn')
+            .value
+            .trim();
+
+        const u =
+          document
+            .getElementById('su')
+            .value
+            .trim();
+
+        const pw =
+          document
+            .getElementById('sp')
+            .value;
+
+
+        if (!n || !u || !pw) {
+
+          alert(
+            'Fill all fields.'
+          );
+
+          return;
+        }
+
+
+        if (
+          state.staff.some(
+            s =>
+              s.username === u
+          )
+        ) {
+
+          alert(
+            'Username already exists.'
+          );
+
+          return;
+        }
+
+
+        state.staff.push({
+
+          id: id(),
+
+          name: n,
+
+          username: u,
+
+          password: pw,
+
+          isAdmin: false
+
+        });
+
+
+        await set(
+          KEY.staff,
+          state.staff
+        );
+
+
+        state.modal =
+          false;
+
+        render();
+
+      }
+    );
+
+
+  /* ---------- REMOVE STAFF ---------- */
+
+  document
+    .querySelectorAll('[data-remove]')
+    .forEach(b => {
+
+      b.onclick =
+        async () => {
+
+          if (
+            confirm(
+              'Remove this staff login?'
+            )
+          ) {
+
+            state.staff =
+              state.staff.filter(
+                s =>
+                  s.id !==
+                  b.dataset.remove
+              );
+
+            await set(
+              KEY.staff,
+              state.staff
+            );
+
+            render();
+
+          }
+
+        };
+
+    });
+
+
+  /* ---------- NEW ORDER ---------- */
+
+  document
+    .getElementById('newOrder')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        state.modal =
+          'order';
+
+        state.tempOrderPhotos =
+          [];
+
+        render();
+
+      }
+    );
+
+
+  /* ---------- CANCEL ORDER ---------- */
+
+  document
+    .getElementById('cancelOrder')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        state.modal =
+          false;
+
+        state.tempOrderPhotos =
+          [];
+
+        render();
+
+      }
+    );
+
+
+  /* ---------- SAVE ORDER ---------- */
+
+  document
+    .getElementById('saveOrder')
+    ?.addEventListener(
+      'click',
+      saveOrder
+    );
+
+
+  /* ---------- UPDATE STATUS ---------- */
+
+  document
+    .querySelectorAll('[data-save-status]')
+    .forEach(b => {
+
+      b.onclick =
+        async () => {
+
+          const order =
+            state.customer.orders.find(
+              x =>
+                x.id ===
+                b.dataset.saveStatus
+            );
+
+          if (!order) {
+            return;
+          }
+
+          order.status =
+            document
+              .querySelector(
+                `[data-status="${order.id}"]`
+              )
+              .value;
+
+          await saveCustomer(
+            state.customer
+          );
+
+          render();
+
+        };
+
+    });
+
+
+  /* ---------- BACK ---------- */
+
+  document
+    .getElementById('back')
+    ?.addEventListener(
+      'click',
+      () => {
+
+        if (
+          state.screen ===
+          'customer'
+        ) {
+
+          state.screen =
+            'login';
+
+          state.phone =
+            null;
+
+        } else {
+
+          state.customer =
+            null;
+
+        }
+
+        state.error =
+          '';
+
+        render();
+
+      }
+    );
+
+
+  /* ---------- DELETE ORDER PHOTO ---------- */
+
+  document
+    .querySelectorAll(
+      '[data-delete-order-photo]'
+    )
+    .forEach(btn => {
+
+      btn.onclick =
+        async () => {
+
+          const orderId =
+            btn.dataset.orderId;
+
+          const photoIndex =
+            Number(
+              btn.dataset
+                .deleteOrderPhoto
+            );
+
+          const order =
+            state.customer.orders.find(
+              o =>
+                o.id === orderId
+            );
+
+          if (!order) {
+            return;
+          }
+
+          order.photos.splice(
+            photoIndex,
+            1
+          );
+
+          await saveCustomer(
+            state.customer
+          );
+
+          render();
+
+        };
+
+    });
+
+
+  /* ---------- PHOTOS ---------- */
+
+  document
+    .getElementById('photos')
+    ?.addEventListener(
+      'change',
+      handlePhotoSelection
+    );
+
+  document
+    .getElementById('customerPhotos')
+    ?.addEventListener(
+      'change',
+      handlePhotoSelection
+    );
+
+
+  renderTempPhotos();
+
+  bindTempPhotoDeletes();
+
+}
+
+
+/* =========================
+   SAVE ORDER
+========================= */
+
+async function saveOrder() {
+
+  if (!state.customer) {
+
+    state.error =
+      'Select a customer first.';
+
+    render();
+
+    return;
+  }
+
+
+  const total =
+    Number(
+      document
+        .getElementById('total')
+        .value
+    ) || 0;
+
+
+  const paid =
+    Number(
+      document
+        .getElementById('paid')
+        .value
+    ) || 0;
+
+
+  if (total < paid) {
+
+    alert(
+      'Advance paid cannot exceed total amount.'
+    );
+
+    return;
+  }
+
+
+  const shirtQuantity =
+    Math.max(
+      0,
+      Number(
+        document
+          .getElementById(
+            'shirtQuantity'
+          )
+          .value
+      ) || 0
+    );
+
+
+  const pantQuantity =
+    Math.max(
+      0,
+      Number(
+        document
+          .getElementById(
+            'pantQuantity'
+          )
+          .value
+      ) || 0
+    );
+
+
+  if (
+    !shirtQuantity &&
+    !pantQuantity
+  ) {
+
+    alert(
+      'Enter at least one shirt or pant.'
+    );
+
+    return;
+  }
+
+
+  const due =
+    document
+      .getElementById('due')
+      .value;
+
+
+  const measurements =
+    document
+      .getElementById('measure')
+      .value
+      .trim();
+
+
+  const notes =
+    document
+      .getElementById('notes')
+      .value
+      .trim();
+
+
+  state.customer.orders =
+    state.customer.orders ||
+    [];
+
+
+  state.customer.orders.push({
+
+    id:
+      'ORD-' +
+      Date.now()
+        .toString()
+        .slice(-6),
+
+    createdAt:
+      iso(),
+
+    type:
+      shirtQuantity &&
+      !pantQuantity
+        ? 'shirt'
+        : pantQuantity &&
+          !shirtQuantity
+          ? 'pant'
+          : 'shirt and pant',
+
+    quantity:
+      shirtQuantity +
+      pantQuantity,
+
+    garments: {
+      shirt: shirtQuantity,
+      pant: pantQuantity
+    },
+
+    takenBy:
+      state.user?.name ||
+      state.user?.username ||
+      'Staff',
+
+    dueDate:
+      due,
+
+    status:
+      'pending',
+
+    total:
+      total,
+
+    advancePaid:
+      paid,
+
+    paid:
+      paid,
+
+    measurements:
+      measurements,
+
+    notes:
+      notes,
+
+    photos:
+      [
+        ...state.tempOrderPhotos.map(
+          p => p.src
+        )
+      ]
+
+  });
+
+
+  await saveCustomer(
+    state.customer
+  );
+
+
+  state.modal =
+    false;
+
+  state.tempOrderPhotos =
+    [];
+
+  render();
+
+}
+
+
+/* =========================
+   INITIALIZE
+========================= */
+
+async function init() {
+
+  try {
+
+    state.staff =
+      await get(KEY.staff);
+
+
+    if (
+      !state.staff ||
+      !state.staff.length
+    ) {
+
+      /*
+       * This is only a fallback.
+       * Normally the Supabase staff table
+       * already contains the admin account.
+       */
+
+      state.staff = [
+        {
+          id: 'admin1',
+          username: 'admin',
+          name: 'Admin',
+          isAdmin: true
+        }
+      ];
+
+    }
+
+
+    state.customers =
+      await get(
+        KEY.customers
+      ) || [];
+
+
+    state.screen =
+      'login';
+
+
+    state.error =
+      '';
+
+
+    render();
+
+  } catch (err) {
+
+    console.error(
+      'Initialization error:',
+      err
+    );
+
+    state.screen =
+      'login';
+
+    state.error =
+      'Unable to connect to the server. Please refresh and try again.';
+
+    render();
+
+  }
+
+}
+
+
+init();
+
+</script>
+
+</body>
+</html>
