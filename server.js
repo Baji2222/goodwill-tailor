@@ -11,21 +11,9 @@ const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_KEY || '';
 const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || '';
 let supabase = null;
-const ADMIN_MOBILE = (process.env.ADMIN_MOBILE || '9494259885');
-// In-memory OTP store for local development when Supabase SMS isn't configured
-const otpStore = new Map();
 
 if (SUPABASE_URL && SUPABASE_SECRET_KEY) {
   supabase = createClient(SUPABASE_URL, SUPABASE_SECRET_KEY);
-}
-
-function normalizePhone(raw) {
-  if (!raw) return null;
-  const digits = String(raw).replace(/\D/g, '');
-  if (digits.length === 12 && digits.startsWith('91')) return digits.slice(2); // +91XXXXXXXXXX -> XXXXXXXXXX
-  if (digits.length === 11 && digits.startsWith('0')) return digits.slice(1);
-  if (digits.length === 10) return digits;
-  return null;
 }
 
 function ensureDataFile() {
@@ -112,7 +100,6 @@ async function migrateLegacyDataToSupabase() {
         password_hash: hashPassword(s.password),
         name: s.name || s.username,
         is_admin: Boolean(s.isAdmin),
-        phone: normalizePhone(s.phone || s.username) || null,
         created_at: new Date().toISOString()
       };
       await supabase.from('staff').upsert(row, { onConflict: 'id' });
@@ -322,162 +309,30 @@ async function handleAuth(req, res, body) {
     const payload = JSON.parse(body || '{}');
     const username = String(payload.username || '').trim();
     const password = String(payload.password || '');
-
-    if (!username || !password) {
-      return sendJSON(res, 400, { ok: false, error: 'Missing username or password' });
-    }
-
-    // If Supabase is configured, verify against Supabase staff table using password_hash
-    if (supabase) {
-      try {
-        const { data, error } = await supabase.from('staff').select('*').eq('username', username).limit(1);
-        if (error || !data || !data.length) {
-          return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
-        }
-
-        const user = data[0];
-        if (user.password_hash !== hashPassword(password)) {
-          return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
-        }
-
-        return sendJSON(res, 200, {
-          ok: true,
-          user: {
-            id: user.id,
-            name: user.name,
-            username: user.username,
-            isAdmin: Boolean(user.is_admin)
-          }
-        });
-      } catch (e) {
-        return sendJSON(res, 500, { ok: false, error: 'Auth lookup failed' });
-      }
-    }
-
-    // Local development fallback: check data.json (legacy plaintext passwords)
-    const data = readData();
-    const staff = (data.gw_staff || []).find(s => String(s.username || '') === username || String(s.phone || '') === username || String(s.id || '') === username) || null;
-
-    if (!staff) {
-      return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
-    }
-
-    if (String(staff.password || '') !== String(password)) {
-      return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
-    }
-
-    return sendJSON(res, 200, {
-      ok: true,
-      user: {
-        id: staff.id,
-        name: staff.name || staff.username,
-        username: staff.username,
-        isAdmin: Boolean(staff.isAdmin)
-      }
-    });
-
-  } catch (e) {
-    return sendJSON(res, 400, { ok: false, error: 'Invalid auth payload' });
-  }
-}
-
-async function handleSendOtp(req, res, body) {
-  try {
-    const payload = JSON.parse(body || '{}');
-    const rawPhone = String(payload.phone || '');
-    const phone = normalizePhone(rawPhone);
-    if (!phone) return sendJSON(res, 400, { ok: false, error: 'Invalid phone' });
-
-    if (!supabase || !SUPABASE_PUBLISHABLE_KEY) {
-        // Fallback: generate a dev OTP so local development can proceed without Supabase SMS
-        const code = String(Math.floor(Math.random() * 1000000)).padStart(6, '0');
-        otpStore.set(phone, code);
-        console.log(`DEV OTP for ${phone}: ${code}`);
-
-        return sendJSON(res, 200, { ok: true, info: 'OTP generated (dev). Check server logs.', devOtp: code });
-    }
-
-    // Attempt to send OTP using Supabase client (server-side). If supabase JS supports signInWithOtp, use it.
-    try {
-      const resp = await supabase.auth.signInWithOtp({ phone: '+91' + phone });
-      return sendJSON(res, 200, { ok: true, info: 'OTP sent (if SMS configured).' });
-    } catch (e) {
-      return sendJSON(res, 500, { ok: false, error: 'Failed to send OTP: ' + String(e.message || e) });
-    }
-  } catch (e) {
-    return sendJSON(res, 400, { ok: false, error: 'Invalid payload' });
-  }
-}
-
-async function handleVerifyOtp(req, res, body) {
-  try {
-    const payload = JSON.parse(body || '{}');
-    const rawPhone = String(payload.phone || '');
-    const token = String(payload.otp || payload.token || '');
-    const phone = normalizePhone(rawPhone);
-    if (!phone || !token) return sendJSON(res, 400, { ok: false, error: 'Invalid phone or otp' });
+    if (!username || !password) return sendJSON(res, 400, { ok: false, error: 'Missing username or password' });
 
     if (!supabase) {
-      // Verify against in-memory OTP store for local development
-        const expected = otpStore.get(phone);
-        if (expected && expected === token) {
-          // consume this OTP so it cannot be reused
-          otpStore.delete(phone);
-
-            if (phone === normalizePhone(ADMIN_MOBILE)) {
-              const u = { id: 'admin-' + phone, name: 'Admin', phone: phone, isAdmin: true };
-              return sendJSON(res, 200, { ok: true, role: 'admin', user: u, staff: u });
-            }
-
-          const data = readData();
-          const staff = (data.gw_staff || []).find(s => String(s.phone || s.username || '').replace(/\D/g, '') === phone) || null;
-
-          if (staff) {
-            const u = { id: staff.id, name: staff.name || staff.username || phone, phone: phone, isAdmin: Boolean(staff.isAdmin) };
-            return sendJSON(res, 200, { ok: true, role: staff.isAdmin ? 'admin' : 'staff', user: u, staff: u });
-          }
-
-          return sendJSON(res, 403, { ok: false, error: 'Unknown staff number' });
-        }
-
-      return sendJSON(res, 401, { ok: false, error: 'Invalid OTP' });
+      const data = readData();
+      const user = (data.gw_staff || []).find(s => s.username === username && s.password === password);
+      if (!user) return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
+      return sendJSON(res, 200, { ok: true, user: { id: user.id, name: user.name, username: user.username, isAdmin: Boolean(user.isAdmin) } });
     }
 
-    // Try verify (some supabase versions offer verifyOtp API); fallback to signInWithOtp with token
-    try {
-      if (typeof supabase.auth.verifyOtp === 'function') {
-        const v = await supabase.auth.verifyOtp({ phone: '+91' + phone, token, type: 'sms' });
-        if (v.error) return sendJSON(res, 401, { ok: false, error: 'Invalid OTP' });
-      } else {
-        const v = await supabase.auth.signInWithOtp({ phone: '+91' + phone, token });
-        if (v.error) return sendJSON(res, 401, { ok: false, error: 'Invalid OTP' });
-      }
-    } catch (e) {
-      return sendJSON(res, 500, { ok: false, error: 'OTP verify failed: ' + String(e.message || e) });
+    const { data: staffRows, error } = await supabase.from('staff').select('*').eq('username', username);
+
+    if (error || !staffRows || !staffRows.length) {
+      return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
     }
 
-    // OTP verified; determine role
-    const normalized = phone;
-
-    if (normalized === normalizePhone(ADMIN_MOBILE)) {
-      // Admin
-      const u = { id: 'admin-' + normalized, name: 'Admin', phone: normalized, isAdmin: true };
-      return sendJSON(res, 200, { ok: true, role: 'admin', user: u, staff: u });
+    const user = staffRows[0];
+    const hash = hashPassword(password);
+    if (user.password_hash !== hash) {
+      return sendJSON(res, 401, { ok: false, error: 'Invalid credentials' });
     }
 
-    // Check staff table for phone
-    if (supabase) {
-      const { data: rows, error } = await supabase.from('staff').select('*').eq('phone', normalized).limit(1);
-      if (error) return sendJSON(res, 500, { ok: false, error: 'DB error' });
-      if (!rows || !rows.length) return sendJSON(res, 403, { ok: false, error: 'Unknown staff number' });
-      const s = rows[0];
-      const u = { id: s.id, name: s.name, phone: s.phone, isAdmin: Boolean(s.is_admin) };
-      return sendJSON(res, 200, { ok: true, role: s.is_admin ? 'admin' : 'staff', user: u, staff: u });
-    }
-
-    return sendJSON(res, 403, { ok: false, error: 'Unknown staff number' });
+    return sendJSON(res, 200, { ok: true, user: { id: user.id, name: user.name, username: user.username, isAdmin: Boolean(user.is_admin) } });
   } catch (e) {
-    return sendJSON(res, 400, { ok: false, error: 'Invalid payload' });
+    return sendJSON(res, 400, { ok: false, error: 'Invalid auth payload' });
   }
 }
 
@@ -582,45 +437,8 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (url.pathname === '/api/send-otp') {
-    if (req.method === 'POST') {
-      let body = '';
-      req.on('data', c => body += c);
-      req.on('end', async () => {
-        await handleSendOtp(req, res, body);
-      });
-      return;
-    }
-    sendJSON(res, 405, { ok: false, error: 'Method not allowed' });
-    return;
-  }
-
-  if (url.pathname === '/api/verify-otp') {
-    if (req.method === 'POST') {
-      let body = '';
-      req.on('data', c => body += c);
-      req.on('end', async () => {
-        await handleVerifyOtp(req, res, body);
-      });
-      return;
-    }
-    sendJSON(res, 405, { ok: false, error: 'Method not allowed' });
-    return;
-  }
-
   if (url.pathname === '/api/data') {
     await handleData(req, res, url);
-    return;
-  }
-
-  // Temporary diagnostic endpoint to reveal the server's working directory
-  if (url.pathname === '/_whoami') {
-    sendJSON(res, 200, {
-      ok: true,
-      cwd: process.cwd(),
-      execPath: process.execPath,
-      argv: process.argv
-    });
     return;
   }
 

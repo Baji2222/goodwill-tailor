@@ -177,6 +177,13 @@ textarea {
   min-width: 110px;
 }
 
+.voice-btn.active {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+  animation: voicePulse 1.1s infinite;
+}
+
 .voice-note {
   font-size: 11px;
   color: var(--muted);
@@ -185,6 +192,24 @@ textarea {
 
 .voice-note.listening {
   color: var(--success);
+  font-weight: 600;
+}
+
+.voice-lang-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 6px;
+}
+
+.voice-lang-btn {
+  font-size: 11px;
+  padding: 6px 10px;
+  min-width: 0;
+}
+
+.voice-speaker-btn {
+  min-width: 44px;
+  padding: 10px 12px;
 }
 
 .btn {
@@ -773,6 +798,7 @@ let state = {
   search: '',
   modal: false,
   tempOrderPhotos: [],
+  voiceLang: 'te-IN',
   voice: {
     panelOpen: false,
     status: 'idle',
@@ -902,15 +928,6 @@ const T = {
   noVoice:
     'Voice input is not supported in this browser (ఈ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ లేదు.)',
 
-  voiceStatusLoginUsername:
-    'Tap the mic and say your username (మైక్ నొక్కి వాడుకరి పేరు చెప్పండి)',
-
-  voiceStatusLoginPassword:
-    'Tap the mic and say your password (మైక్ నొక్కి పాస్వర్డ్ చెప్పండి)',
-
-  voiceStatusAddress:
-    'Tap the mic and speak the address (మైక్ నొక్కి చిరునామా చెప్పండి)',
-
   mobile:
     'Mobile number (మొబైల్ నంబర్)',
 
@@ -1021,6 +1038,51 @@ const T = {
 
   staffLogins:
     'Staff logins (స్టాఫ్ లాగిన్స్)',
+
+  otp:
+    'OTP (ఓటిపి)',
+
+  otpPlaceholder:
+    '6-digit OTP (6-అంకెల ఓటిపి)',
+
+  sendOtp:
+    'Send OTP (ఓటిపి పంపండి)',
+
+  verifyOtp:
+    'Verify OTP (ఓటిపి నిర్ధారించండి)',
+
+  resendOtp:
+    'Resend OTP (ఓటిపి మళ్ళీ పంపండి)',
+
+  resendOtpIn:
+    n => `Resend OTP in ${n}s (${n}సె లో మళ్ళీ పంపండి)`,
+
+  changeMobile:
+    'Change mobile number (మొబైల్ నంబర్ మార్చండి)',
+
+  invalidMobile:
+    'Please enter a valid 10-digit mobile number. (దయచేసి సరైన 10-అంకెల మొబైల్ నంబర్ నమోదు చేయండి.)',
+
+  otpSendFailed:
+    'Unable to send OTP. Please try again. (ఓటిపి పంపడం సాధ్యం కాలేదు. మళ్ళీ ప్రయత్నించండి.)',
+
+  otpIncorrect:
+    'Incorrect OTP. Please check the OTP and try again. (ఓటిపి తప్పు. మళ్ళీ సరిచూసి ప్రయత్నించండి.)',
+
+  otpExpired:
+    'OTP expired. Please request a new OTP. (ఓటిపి గడువు ముగిసింది. కొత్త ఓటిపి కోరండి.)',
+
+  staffNotRegistered:
+    'This mobile number is not registered as Staff. (ఈ మొబైల్ నంబర్ స్టాఫ్‌గా నమోదు కాలేదు.)',
+
+  adminNotAuthorized:
+    'This mobile number is not authorized for Admin access. (ఈ మొబైల్ నంబర్‌కు అడ్మిన్ యాక్సెస్ లేదు.)',
+
+  otpVerified:
+    'OTP verified successfully. (ఓటిపి విజయవంతంగా నిర్ధారించబడింది.)',
+
+  staffMobile:
+    'Staff mobile number (స్టాఫ్ మొబైల్ నంబర్)',
 
   customerNotFound:
     'Customer not found (కస్టమర్ కనుగొనబడలేదు.)',
@@ -1154,7 +1216,6 @@ function login() {
         </div>
 
         ${
-
           state.tab === 'staff'
 
             ? `
@@ -1163,41 +1224,19 @@ function login() {
 
                 <div class="field">
                   <label>${T.username}</label>
-                  <div class="voice-name-wrap">
-                    <input
-                      id="u"
-                      autocomplete="username"
-                      required>
-                    <button
-                      class="btn outline voice-btn"
-                      id="voiceLoginUsername"
-                      type="button">
-                      🎙 ${T.voice}
-                    </button>
-                  </div>
+                  <input
+                    id="u"
+                    autocomplete="username"
+                    required>
                 </div>
 
                 <div class="field">
                   <label>${T.password}</label>
-                  <div class="voice-name-wrap">
-                    <input
-                      id="p"
-                      type="password"
-                      autocomplete="current-password"
-                      required>
-                    <button
-                      class="btn outline voice-btn"
-                      id="voiceLoginPassword"
-                      type="button">
-                      🎙 ${T.voice}
-                    </button>
-                  </div>
-                </div>
-
-                <div
-                  class="voice-note"
-                  id="loginVoiceStatus">
-                  ${T.voiceStatusLoginUsername}
+                  <input
+                    id="p"
+                    type="password"
+                    autocomplete="current-password"
+                    required>
                 </div>
 
                 <button class="btn primary full">
@@ -1237,12 +1276,6 @@ function login() {
         ${
           state.error
             ? `<div class="error">${state.error}</div>`
-            : ''
-        }
-
-        ${
-          state.tab === 'staff'
-            ? `<p class="hint">${T.loginDemo}</p>`
             : ''
         }
 
@@ -1454,7 +1487,7 @@ function admin() {
               </div>
 
               <div class="secondary">
-                ${T.mobile}: ${esc(s.phone || s.username || '')}
+                ${T.username}: ${esc(s.username)}
               </div>
 
             </div>
@@ -2073,20 +2106,22 @@ function staffModal() {
         <div class="field">
 
           <label>
-            Username
+            ${T.username}
           </label>
 
-          <input id="susername" placeholder="username (can be numeric)">
+          <input id="su">
 
         </div>
 
         <div class="field">
 
           <label>
-            Password
+            ${T.password}
           </label>
 
-          <input id="spassword" type="password" placeholder="password">
+          <input
+            id="sp"
+            type="password">
 
         </div>
 
@@ -2169,6 +2204,15 @@ function customerModal(edit = false) {
             ${T.fullName}
           </label>
 
+          <div class="voice-lang-row">
+            <button
+              class="btn outline voice-lang-btn"
+              id="voiceLangToggleCustomer"
+              type="button">
+              ${voiceLangButtonLabel()}
+            </button>
+          </div>
+
           <div class="voice-name-wrap">
 
             <input
@@ -2220,9 +2264,7 @@ function customerModal(edit = false) {
             ${T.address}
           </label>
 
-          <div
-            class="voice-name-wrap"
-            style="align-items:flex-start">
+          <div class="voice-name-wrap">
 
             <textarea
               id="caddress"
@@ -2232,7 +2274,9 @@ function customerModal(edit = false) {
               class="btn outline voice-btn"
               id="voiceCustomerAddress"
               type="button">
+
               🎙 ${T.voice}
+
             </button>
 
           </div>
@@ -2240,7 +2284,9 @@ function customerModal(edit = false) {
           <div
             class="voice-note"
             id="addressVoiceStatus">
-            ${T.voiceStatusAddress}
+
+            ${T.voiceStatus}
+
           </div>
 
         </div>
@@ -2313,7 +2359,7 @@ function customerModal(edit = false) {
 
           <textarea
             id="customerSizes"
-            placeholder="చెపు, వెస్ట్, భుజం, స్లీవ్, పొడవు...">${esc(firstOrder.measurements || '')}</textarea>
+            placeholder="చెப்பு, వెస్ట్, భుజం, స్లీవ్, పొడవు...">${esc(firstOrder.measurements || '')}</textarea>
 
         </div>
 
@@ -2515,7 +2561,7 @@ function orderModal() {
 
           <textarea
             id="measure"
-            placeholder="చెపు, వెస్ట్, భుజం, స్లీవ్..."></textarea>
+            placeholder="చెப்பு, వెస్ట్, భుజం, స్లీవ్..."></textarea>
 
         </div>
 
@@ -2946,121 +2992,315 @@ function startCustomerNameVoice() {
 
 
 /* =========================
-   GENERIC FIELD SPEECH-TO-TEXT
-   (reusable mic button for any
-   input/textarea — login fields,
-   customer address, etc.)
+   BILINGUAL FIELD VOICE
+   (Speech-to-text + text-to-speech "listen" helper
+   for individual form fields — login username/
+   password, customer name, customer address.
+   Shares the te-IN/en-IN toggle in state.voiceLang.)
 ========================= */
 
-function startFieldVoice(config) {
+function voiceLangButtonLabel() {
+  return state.voiceLang === 'en-IN'
+    ? '🌐 English'
+    : '🌐 తెలుగు';
+}
 
-  const {
-    inputId,
-    statusId,
-    lang = 'en-IN',
-    stripSpaces = false,
-    listeningText = '🎙 Listening... (వింటున్నాను...)',
-    errorText = '⚠️ Could not understand. Please try again. (అర్థం కాలేదు. మళ్ళీ ప్రయత్నించండి.)',
-    doneText = clean => `✅ ${clean}`
-  } = config || {};
+function toggleVoiceLang() {
 
-  const input =
-    document.getElementById(inputId);
+  state.voiceLang =
+    state.voiceLang === 'en-IN'
+      ? 'te-IN'
+      : 'en-IN';
 
-  const status =
-    statusId
-      ? document.getElementById(statusId)
-      : null;
+  render();
+}
+
+function chooseVoiceForLang(lang) {
+
+  const voices = speechVoices();
+  const target = (lang || 'te-IN').toLowerCase();
+  const prefix = target.slice(0, 2);
+
+  const exact =
+    voices.find(v => (v.lang || '').toLowerCase() === target);
+
+  const byPrefix =
+    voices.find(v => (v.lang || '').toLowerCase().startsWith(prefix));
+
+  const india =
+    voices.find(v => /in/i.test(v.lang || ''));
+
+  return exact || byPrefix || india || voices[0] || null;
+}
+
+function speakGeneric(text, lang) {
+
+  try {
+
+    if (!('speechSynthesis' in window) || !text) {
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const useLang = lang || state.voiceLang || 'te-IN';
+    const voice = chooseVoiceForLang(useLang);
+
+    const msg = new SpeechSynthesisUtterance(text);
+
+    msg.lang = useLang;
+    msg.rate = 0.95;
+    msg.volume = 1;
+
+    if (voice) {
+      msg.voice = voice;
+    }
+
+    window.speechSynthesis.speak(msg);
+
+  } catch (e) {
+    // Ignore audio errors.
+  }
+}
+
+function speakFieldValue(inputId) {
+
+  const input = document.getElementById(inputId);
+  const value = (input?.value || '').trim();
+
+  if (!value) {
+    speakGeneric(
+      state.voiceLang === 'en-IN'
+        ? 'This field is empty.'
+        : 'ఇది ఖాళీగా ఉంది.'
+    );
+    return;
+  }
+
+  speakGeneric(value);
+}
+
+let activeFieldRecognition = null;
+let activeFieldRecognitionInputId = null;
+
+function toggleFieldVoiceInput(inputId, statusId, buttonId, options = {}) {
+
+  if (activeFieldRecognition && activeFieldRecognitionInputId === inputId) {
+    activeFieldRecognition.requestStop();
+    return;
+  }
+
+  startFieldVoiceInput(inputId, statusId, { ...options, buttonId });
+}
+
+function startFieldVoiceInput(inputId, statusId, options = {}) {
+
+  // Only one field can listen at a time — stop whatever else is active.
+  if (activeFieldRecognition) {
+    activeFieldRecognition.requestStop();
+    activeFieldRecognition = null;
+    activeFieldRecognitionInputId = null;
+  }
+
+  const isSecret = Boolean(options.secret);
+  const promptMsg = options.prompt || null;
+
+  const input = document.getElementById(inputId);
+  const status = statusId ? document.getElementById(statusId) : null;
+  const button = options.buttonId ? document.getElementById(options.buttonId) : null;
 
   const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+  const isEnglish = state.voiceLang === 'en-IN';
+
   if (!SpeechRecognition) {
 
     if (status) {
-      status.textContent = T.noVoice;
+      status.textContent =
+        isEnglish
+          ? 'Voice input is not supported in this browser.'
+          : 'ఈ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ లేదు.';
     }
+
+    speakGeneric(
+      isEnglish
+        ? 'Voice input is not supported in this browser. Please type instead.'
+        : 'ఈ బ్రౌజర్‌లో వాయిస్ ఇన్‌పుట్ లేదు. టైప్ చేయండి.'
+    );
 
     return;
   }
 
-  const recognition =
-    new SpeechRecognition();
+  const recognition = new SpeechRecognition();
 
-  recognition.lang = lang;
-  recognition.interimResults = false;
+  recognition.lang = state.voiceLang || 'te-IN';
+  recognition.interimResults = true;
+  recognition.continuous = true;
   recognition.maxAlternatives = 1;
 
+  let finalTranscript = '';
+  let manualStop = false;
+  let terminalErrorMsg = null;
+
+  // Browsers end the recognition session on a few seconds of silence
+  // even with continuous:true. To make the mic feel like it's really
+  // listening until the person taps Stop, we transparently restart it
+  // whenever it ends on its own (not from a real error or a manual stop).
+  recognition.requestStop = () => {
+    manualStop = true;
+    try {
+      recognition.stop();
+    } catch (e) {
+      // ignore
+    }
+  };
+
+  const applyToInput = text => {
+
+    if (!input || !text) {
+      return;
+    }
+
+    input.value =
+      isSecret
+        ? text.replace(/\s+/g, '')
+        : text.replace(/\s+/g, ' ');
+  };
+
+  const setListeningUi = on => {
+
+    if (status) {
+      status.classList.toggle('listening', on);
+    }
+
+    if (button) {
+      button.classList.toggle('active', on);
+      button.textContent =
+        on
+          ? (isEnglish ? '🛑 Stop' : '🛑 ఆపు')
+          : `🎙 ${T.voice}`;
+    }
+  };
+
+  recognition.onresult = event => {
+
+    let interim = '';
+
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+
+      const piece = event.results[i][0].transcript;
+
+      if (event.results[i].isFinal) {
+        finalTranscript =
+          (finalTranscript ? finalTranscript + ' ' : '') + piece.trim();
+      } else {
+        interim += piece;
+      }
+    }
+
+    const combined = (finalTranscript + ' ' + interim).trim();
+
+    applyToInput(combined);
+
+    if (status) {
+      status.textContent =
+        isEnglish
+          ? `Hearing: ${combined || '...'}`
+          : `వినిపిస్తోంది: ${combined || '...'}`;
+    }
+  };
+
+  recognition.onerror = event => {
+
+    const code = event?.error;
+
+    // A silence timeout is routine in continuous mode — onend will
+    // transparently restart the session, so don't show it as a
+    // failure or mark it terminal.
+    if (code === 'no-speech' || code === 'aborted') {
+      return;
+    }
+
+    let msg;
+
+    if (code === 'not-allowed' || code === 'service-not-allowed') {
+      msg = isEnglish ? 'Microphone permission denied. Please allow microphone access.' : 'మైక్రోఫోన్ అనుమతి నిరాకరించబడింది. దయచేసి మైక్రోఫోన్ యాక్సెస్ ఇవ్వండి.';
+    } else if (code === 'audio-capture') {
+      msg = isEnglish ? 'No microphone found.' : 'మైక్రోఫోన్ కనిపించలేదు.';
+    } else if (code === 'network') {
+      msg = isEnglish ? 'Network error — voice recognition needs an internet connection.' : 'నెట్‌వర్క్ సమస్య — వాయిస్ గుర్తింపుకు ఇంటర్నెట్ కావాలి.';
+    } else if (code === 'language-not-supported') {
+      msg = isEnglish ? 'This language is not supported for voice input on this device.' : 'ఈ పరికరంలో ఈ భాషకు వాయిస్ ఇన్‌పుట్ లేదు.';
+    } else {
+      msg = isEnglish ? `Voice error: ${code || 'unknown'}.` : `వాయిస్ సమస్య: ${code || 'తెలియదు'}.`;
+    }
+
+    terminalErrorMsg = msg;
+
+    if (status) {
+      status.textContent = msg;
+    }
+  };
+
+  recognition.onend = () => {
+
+    // Ended on its own (silence timeout) and the person hasn't tapped
+    // Stop and there's no real error — keep the mic "open" by
+    // restarting behind the scenes.
+    if (!manualStop && !terminalErrorMsg) {
+
+      try {
+        recognition.start();
+        return;
+      } catch (e) {
+        // fall through and finalize below if restart itself fails
+      }
+    }
+
+    setListeningUi(false);
+
+    activeFieldRecognition = null;
+    activeFieldRecognitionInputId = null;
+
+    const finalClean = finalTranscript.trim();
+
+    applyToInput(finalClean);
+
+    // Never clobber a specific error message with the generic
+    // "nothing heard" fallback.
+    if (status && !terminalErrorMsg) {
+      status.textContent =
+        finalClean
+          ? (isEnglish ? `Heard: ${finalClean}` : `వినిపించింది: ${finalClean}`)
+          : (isEnglish ? 'Nothing heard.' : 'వాయిస్ పాసైంది.');
+    }
+  };
+
   if (status) {
-
-    status.classList.add('listening');
-    status.textContent = listeningText;
-
+    status.textContent =
+      promptMsg ||
+      (isEnglish ? 'Listening... speak now' : 'వినుచున్నాను... మాట్లాడండి');
   }
 
-  recognition.start();
+  setListeningUi(true);
 
-  recognition.onresult =
-    event => {
+  try {
+    recognition.start();
+    activeFieldRecognition = recognition;
+    activeFieldRecognitionInputId = inputId;
+  } catch (e) {
 
-      const transcript =
-        event.results?.[0]?.[0]?.transcript ||
-        '';
+    setListeningUi(false);
 
-      let clean =
-        transcript
-          .trim()
-          .replace(/\s+/g, ' ');
-
-      if (stripSpaces) {
-        clean = clean.replace(/\s+/g, '');
-      }
-
-      if (input && clean) {
-        input.value = clean;
-      }
-
-      if (status) {
-
-        status.classList.remove(
-          'listening'
-        );
-
-        status.textContent =
-          clean
-            ? doneText(clean)
-            : '⚠️ No speech detected. (వాయిస్ వినిపించలేదు.)';
-
-      }
-
-    };
-
-  recognition.onerror =
-    () => {
-
-      if (status) {
-
-        status.classList.remove(
-          'listening'
-        );
-
-        status.textContent = errorText;
-
-      }
-
-    };
-
-  recognition.onend =
-    () => {
-
-      if (status) {
-        status.classList.remove(
-          'listening'
-        );
-      }
-
-    };
+    if (status) {
+      status.textContent =
+        isEnglish
+          ? 'Could not start the microphone.'
+          : 'మైక్రోఫోన్ ప్రారంభించలేకపోయాము.';
+    }
+  }
 }
 
 
@@ -4667,60 +4907,6 @@ function attach() {
     );
 
 
-  /* ---------- STAFF USERNAME/PASSWORD LOGIN ---------- */
-
-  document
-    .getElementById('login')
-    ?.addEventListener(
-      'submit',
-      async e => {
-        e.preventDefault();
-
-        const u = (document.getElementById('u') || {}).value.trim();
-        const p = ((document.getElementById('p') || {}).value || '').trim();
-
-        if (!u || !p) {
-          state.error = 'Enter username and password.';
-          render();
-          return;
-        }
-
-        try {
-          const r = await fetch('/api/auth', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: u, password: p })
-          });
-
-          const j = await r.json().catch(() => ({}));
-
-          if (!r.ok || !j.ok) {
-            // keep existing error message
-            state.error = 'Invalid username or password.';
-            render();
-            return;
-          }
-
-          const matched = j.user || null;
-
-          state.user = { id: matched.id, name: matched.name || matched.username || u, phone: matched.phone || null, isAdmin: Boolean(matched.isAdmin) };
-          state.screen = matched.isAdmin ? 'admin' : 'staff';
-
-          try { state.staff = await get(KEY.staff) || state.staff; state.customers = await get(KEY.customers) || state.customers; } catch (e) {}
-
-          state.error = '';
-          render();
-
-        } catch (err) {
-          console.error('Login error', err);
-          state.error = 'Login failed.';
-          render();
-        }
-
-      }
-    );
-
-
   /* ==================================================
      FIXED STAFF / ADMIN LOGIN
 
@@ -4732,90 +4918,110 @@ function attach() {
   ================================================== */
 
   document
-    .getElementById('sendOtpBtn')
+    .getElementById('login')
     ?.addEventListener(
-      'click',
-      async () => {
-        const p = (document.getElementById('staffPhone')||{}).value.trim();
-        if (!/^\d{10}$/.test(p)) {
-          state.error = T.invalidPhone;
-          render();
-          return;
-        }
+      'submit',
+      async e => {
+
+        e.preventDefault();
+
+        const u =
+          document
+            .getElementById('u')
+            .value
+            .trim();
+
+        const p =
+          document
+            .getElementById('p')
+            .value;
 
         state.error = '';
-        render();
 
         try {
-          const r = await fetch('/api/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: p }) });
-          const j = await r.json().catch(() => ({}));
-          if (!r.ok || !j.ok) {
-            state.error = j?.error || 'Failed to send OTP.';
+
+          const r =
+            await fetch(
+              '/api/auth',
+              {
+                method: 'POST',
+
+                headers: {
+                  'Content-Type':
+                    'application/json'
+                },
+
+                body: JSON.stringify({
+                  username: u,
+                  password: p
+                })
+              }
+            );
+
+          let result;
+
+          try {
+
+            result =
+              await r.json();
+
+          } catch (jsonError) {
+
+            result = {
+              ok: false
+            };
+
+          }
+
+          if (!r.ok || !result.ok) {
+
+            state.error =
+              result?.error ||
+              'Incorrect username or password.';
+
             render();
+
             return;
           }
 
-          // show otp field
-          document.getElementById('otpField').style.display = 'block';
-          state.error = '';
-          render();
-        } catch (err) {
-          console.error(err);
-          state.error = 'OTP service unavailable.';
-          render();
-        }
-      }
-    );
+          if (!result.user) {
 
-  document
-    .getElementById('showOtpFieldBtn')
-    ?.addEventListener('click', () => {
-      document.getElementById('otpField').style.display = 'block';
-    });
+            state.error =
+              'Login succeeded but user information was not returned.';
 
-  document
-    .getElementById('verifyOtpBtn')
-    ?.addEventListener(
-      'click',
-      async () => {
-        const p = (document.getElementById('staffPhone')||{}).value.trim();
-        const otp = (document.getElementById('staffOtp')||{}).value.trim();
-
-        if (!/^\d{10}$/.test(p)) {
-          state.error = T.invalidPhone;
-          render();
-          return;
-        }
-
-        if (!/^\d{4,6}$/.test(otp)) {
-          state.error = 'Enter the 6-digit OTP.';
-          render();
-          return;
-        }
-
-        try {
-          const r = await fetch('/api/verify-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: p, otp }) });
-          const j = await r.json().catch(() => ({}));
-          if (!r.ok || !j.ok) {
-            state.error = j?.error || 'OTP verification failed.';
             render();
+
             return;
           }
 
-          state.user = j.user || { name: j?.user?.name || p };
-          state.screen = j.role === 'admin' ? 'admin' : 'staff';
+          state.user =
+            result.user;
 
-          // reload staff/customers to populate dashboard
-          try { state.staff = await get(KEY.staff) || state.staff; state.customers = await get(KEY.customers) || state.customers; } catch(e){}
+          state.screen =
+            result.user.isAdmin
+              ? 'admin'
+              : 'staff';
 
           state.error = '';
+
+          state.customer = null;
+
           render();
 
         } catch (err) {
-          console.error(err);
-          state.error = 'OTP verification service unavailable.';
+
+          console.error(
+            'Login error:',
+            err
+          );
+
+          state.error =
+            'Login service unavailable. Please try again.';
+
           render();
+
         }
+
       }
     );
 
@@ -5078,56 +5284,6 @@ function attach() {
     );
 
 
-    /* ---------- CONFIRM ADD STAFF ---------- */
-
-    document
-      .getElementById('confirm')
-      ?.addEventListener(
-        'click',
-        async () => {
-          try {
-            const name = (document.getElementById('sn') || {}).value.trim();
-            const username = (document.getElementById('susername') || {}).value.trim();
-            const password = (document.getElementById('spassword') || {}).value || '';
-
-            if (!name || !username || !password) {
-              alert('Enter name, username and password.');
-              return;
-            }
-
-            const staff = (await get(KEY.staff)) || [];
-
-            // ensure unique username
-            if (staff.find(s => String(s.username || '') === username)) {
-              alert('Username already exists.');
-              return;
-            }
-
-            const newStaff = {
-              id: 'staff-' + Date.now().toString().slice(-6),
-              username: username,
-              password: String(password),
-              name: name,
-              isAdmin: false
-            };
-
-            staff.push(newStaff);
-
-            await set(KEY.staff, staff);
-
-            state.modal = false;
-            state.staff = staff;
-            state.error = '';
-            render();
-
-          } catch (err) {
-            console.error('Add staff error', err);
-            alert('Failed to add staff.');
-          }
-        }
-      );
-
-
   /* ---------- CANCEL CUSTOMER ---------- */
 
   document
@@ -5150,22 +5306,21 @@ function attach() {
     .getElementById('voiceCustomerName')
     ?.addEventListener(
       'click',
-      startCustomerNameVoice
+      () => toggleFieldVoiceInput('cname', 'voiceStatus', 'voiceCustomerName')
     );
 
   document
     .getElementById('voiceCustomerAddress')
     ?.addEventListener(
       'click',
-      () => startFieldVoice({
-        inputId: 'caddress',
-        statusId: 'addressVoiceStatus',
-        lang: 'te-IN',
-        listeningText:
-          '🎙 Listening for address... (చిరునామా వింటున్నాను...)',
-        doneText: clean =>
-          `✅ ${T.address.split(' (')[0]}: ${clean}`
-      })
+      () => toggleFieldVoiceInput('caddress', 'addressVoiceStatus', 'voiceCustomerAddress')
+    );
+
+  document
+    .getElementById('voiceLangToggleCustomer')
+    ?.addEventListener(
+      'click',
+      toggleVoiceLang
     );
 
 
@@ -5275,7 +5430,8 @@ function attach() {
 
           const existing =
             customers.find(
-              c => c.phone === phone
+              c =>
+                c.phone === phone
             );
 
 
@@ -5480,30 +5636,76 @@ function attach() {
     ?.addEventListener(
       'click',
       async () => {
-        const n = (document.getElementById('sn')||{}).value.trim();
-        const phone = (document.getElementById('sphone')||{}).value.trim();
 
-        if (!n || !/^\d{10}$/.test(phone)) {
-          alert('Enter a valid name and 10-digit mobile number.');
+        const n =
+          document
+            .getElementById('sn')
+            .value
+            .trim();
+
+        const u =
+          document
+            .getElementById('su')
+            .value
+            .trim();
+
+        const pw =
+          document
+            .getElementById('sp')
+            .value;
+
+
+        if (!n || !u || !pw) {
+
+          alert(
+            'Fill all fields.'
+          );
+
           return;
         }
 
-        if (state.staff.some(s => String(s.phone || '').replace(/\D/g,'') === phone)) {
-          alert('Mobile number already exists.');
+
+        if (
+          state.staff.some(
+            s =>
+              s.username === u
+          )
+        ) {
+
+          alert(
+            'Username already exists.'
+          );
+
           return;
         }
+
 
         state.staff.push({
+
           id: id(),
+
           name: n,
-          phone: phone,
+
+          username: u,
+
+          password: pw,
+
           isAdmin: false
+
         });
 
-        await set(KEY.staff, state.staff);
 
-        state.modal = false;
+        await set(
+          KEY.staff,
+          state.staff
+        );
+
+
+        state.modal =
+          false;
+
         render();
+
       }
     );
 
@@ -5942,8 +6144,20 @@ async function init() {
       !state.staff.length
     ) {
 
-      /* No local staff fallback. Staff/Admin must be provisioned via Admin or DB migration. */
-      state.staff = [];
+      /*
+       * This is only a fallback.
+       * Normally the Supabase staff table
+       * already contains the admin account.
+       */
+
+      state.staff = [
+        {
+          id: 'admin1',
+          username: 'admin',
+          name: 'Admin',
+          isAdmin: true
+        }
+      ];
 
     }
 

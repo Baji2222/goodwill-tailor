@@ -4,8 +4,8 @@ const crypto = require('crypto');
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_KEY || '';
 
-function hashPassword(password) {
-  return crypto.createHash('sha256').update(String(password || '')).digest('hex');
+function hashPassword(pw) {
+  return crypto.createHash('sha256').update(String(pw || '')).digest('hex');
 }
 
 function sendJson(res, status, data) {
@@ -52,33 +52,27 @@ module.exports = async function handler(req, res) {
     }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SECRET_KEY);
-    const { data: rows, error } = await supabase
-      .from('staff')
-      .select('*')
-      .eq('username', username)
-      .limit(1);
 
-    if (error || !rows || !rows.length) {
+    const { data: staffRows, error } = await supabase.from('staff').select('*').eq('username', username);
+
+    if (error || !staffRows || !staffRows.length) {
       sendJson(res, 401, { ok: false, error: 'Invalid credentials' });
       return;
     }
 
-    const user = rows[0];
-    if (user.password_hash !== hashPassword(password)) {
+    const user = staffRows[0];
+    const hash = hashPassword(password);
+
+    if (user.password_hash !== hash) {
       sendJson(res, 401, { ok: false, error: 'Invalid credentials' });
       return;
     }
 
     sendJson(res, 200, {
       ok: true,
-      user: {
-        id: user.id,
-        name: user.name,
-        username: user.username,
-        isAdmin: Boolean(user.is_admin)
-      }
+      user: { id: user.id, name: user.name, username: user.username, isAdmin: Boolean(user.is_admin) }
     });
   } catch (e) {
-    sendJson(res, 400, { ok: false, error: e.message || 'Invalid auth payload' });
+    sendJson(res, 400, { ok: false, error: 'Invalid auth payload' });
   }
 };
